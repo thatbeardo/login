@@ -1,0 +1,105 @@
+basePath: /
+definitions:
+  repository.User:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+    type: object
+  views.ErrView:
+    properties:
+      detail:
+        type: string
+      id:
+        type: string
+      source:
+        $ref: '#/definitions/views.Source'
+      status:
+        type: integer
+    type: object
+  views.Source:
+    properties:
+      parameter:
+        type: string
+      pointer:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: |-
+    ## Users
+    ---
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Fan fit login
+  version: 0.1.0
+paths:
+  /v1/users/:
+    post:
+      consumes:
+      - application/json
+      description: Add a new user to users table
+      parameters:
+      - description: Details of the new user
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/repository.User'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: ok
+          schema:
+            $ref: '#/definitions/repository.User'
+        "500":
+          description: ok
+          schema:
+            $ref: '#/definitions/views.ErrView'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new User
+      tags:
+      - Users
+  /v1/users/{email_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a user by its Email ID
+      parameters:
+      - description: User Email ID
+        in: path
+        name: email_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/repository.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/views.ErrView'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/views.ErrView'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by Email ID
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
