@@ -9,5 +9,5 @@ import (
 func Routes(r *gin.RouterGroup, service service.Service) {
 	router := r.Group("/users")
 	router.GET("/:email_id", getByID(service))
-	router.POST("", post(service))
+	router.POST("/", post(service))
 }
