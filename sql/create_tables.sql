@@ -21,10 +21,14 @@ CREATE TABLE creators{
     fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
-    background_picture  TEXT    NOT NULL
+    background_picture  TEXT    NOT NULL,
+    PRIMARY KEY (fanfit_user_id),
+    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 };
 CREATE TABLE consumers{
-    fanfit_user_id      INT     FOREIGN KEY
+    fanfit_user_id      INT     FOREIGN KEY,
+    PRIMARY KEY (fanfit_user_id),
+    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 };
     -- create_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- id SERIAL PRIMARY  KEY     NOT NULL,
