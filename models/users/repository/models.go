@@ -2,19 +2,10 @@
 
 package repository
 
-import (
-	"time"
-)
+import ()
 
 type User struct {
-	ID             int32
-	FirstName      string
-	LastName       string
-	Email          string
-	CreatedDate    time.Time
-	Username       string
-	PhoneNo        int32
-	Gender         string
-	ProfilePicture string
-	Bio            string
+	FirstName string
+	LastName  string
+	Email     string
 }
