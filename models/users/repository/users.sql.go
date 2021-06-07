@@ -5,29 +5,58 @@ package repository
 
 import (
 	"context"
+	"time"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users ( 
   first_name,
   last_name, 
-  email
+  email,
+  created_date,
+  username,
+  phone_no,
+  gender,
+  profile_picture,
+  bio
 ) VALUES (
   $1, 
   $2, 
-  $3
+  $3,
+  $4, 
+  $5, 
+  $6,
+  $7, 
+  $8, 
+  $9
 )
 RETURNING id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
 
 type CreateUserParams struct {
-	FirstName string
-	LastName  string
-	Email     string
+	FirstName      string
+	LastName       string
+	Email          string
+	CreatedDate    time.Time
+	Username       string
+	PhoneNo        int32
+	Gender         string
+	ProfilePicture string
+	Bio            string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.FirstName, arg.LastName, arg.Email)
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.FirstName,
+		arg.LastName,
+		arg.Email,
+		arg.CreatedDate,
+		arg.Username,
+		arg.PhoneNo,
+		arg.Gender,
+		arg.ProfilePicture,
+		arg.Bio,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
