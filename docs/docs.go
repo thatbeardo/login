@@ -127,34 +127,13 @@ var doc = `{
         "repository.User": {
             "type": "object",
             "properties": {
-                "bio": {
-                    "type": "string"
-                },
-                "createdDate": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },
                 "firstName": {
                     "type": "string"
                 },
-                "gender": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
                 "lastName": {
-                    "type": "string"
-                },
-                "phoneNo": {
-                    "type": "integer"
-                },
-                "profilePicture": {
-                    "type": "string"
-                },
-                "username": {
                     "type": "string"
                 }
             }
