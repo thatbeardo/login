@@ -5,55 +5,140 @@ package repository
 
 import (
 	"context"
+	"time"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users ( 
   first_name,
   last_name, 
-  email
+  email,
+  created_date,
+  username,
+  phone_no,
+  gender,
+  profile_picture,
+  bio
 ) VALUES (
   $1, 
   $2, 
-  $3
+  $3,
+  $4, 
+  $5, 
+  $6,
+  $7, 
+  $8, 
+  $9
 )
-RETURNING first_name, last_name, email
+RETURNING id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
 
 type CreateUserParams struct {
-	FirstName string
-	LastName  string
-	Email     string
+	FirstName      string
+	LastName       string
+	Email          string
+	CreatedDate    time.Time
+	Username       string
+	PhoneNo        int32
+	Gender         string
+	ProfilePicture string
+	Bio            string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.FirstName, arg.LastName, arg.Email)
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.FirstName,
+		arg.LastName,
+		arg.Email,
+		arg.CreatedDate,
+		arg.Username,
+		arg.PhoneNo,
+		arg.Gender,
+		arg.ProfilePicture,
+		arg.Bio,
+	)
 	var i User
-	err := row.Scan(&i.FirstName, &i.LastName, &i.Email)
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+	)
 	return i, err
 }
 
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
-RETURNING first_name, last_name, email
+RETURNING id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	row := q.db.QueryRowContext(ctx, deleteUser, email)
 	var i User
-	err := row.Scan(&i.FirstName, &i.LastName, &i.Email)
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT first_name, last_name, email FROM users 
+SELECT id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio FROM users 
 WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
 	var i User
-	err := row.Scan(&i.FirstName, &i.LastName, &i.Email)
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+	)
+	return i, err
+}
+
+const getUserByUsername = `-- name: GetUserByUsername :one
+SELECT id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio FROM users 
+WHERE username = $1
+`
+
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByUsername, username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+	)
 	return i, err
 }

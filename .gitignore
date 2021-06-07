@@ -16,3 +16,6 @@ vendor/
 
 *.html
 coverage
+
+# To ignore stuff on mac
+*.DS_Store*
