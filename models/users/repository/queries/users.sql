@@ -8,6 +8,7 @@ INSERT INTO users (
   last_name, 
   email,
   created_date,
+  user_type_id,
   username,
   phone_no,
   gender,
@@ -22,11 +23,25 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9,
+  $10
 )
 RETURNING *;
+
+-- name: CreateConsumer :one
+INSERT INTO consumers(
+  fanfit_user_id
+) VALUES(
+  $1
+)
+RETURNING *;
+
+
 
 -- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
 RETURNING *;
+
+
+

@@ -29,6 +29,13 @@ func post(service service.Service) gin.HandlerFunc {
 		}
 		fmt.Println("About to create")
 		response, err := service.Create(c.Request.Context(), input)
+		// 0 is for creator, 1 is for consumer
+		userID, er := service.CreateConsumer(c.Request.Context(), response.ID)
+		if userID != 0 && er != nil {
+			views.Wrap(err, c)
+			return
+		}
+
 		if err != nil {
 			views.Wrap(err, c)
 			return

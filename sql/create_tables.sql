@@ -8,12 +8,12 @@ CREATE TABLE users (
     first_name      TEXT    NOT NULL,
     last_name       TEXT    NOT NULL,
     email           TEXT    NOT NULL UNIQUE,
-    created_date    TIMESTAMP NOT NULL,
-    username        TEXT NOT NULL UNIQUE,
-    phone_no        INT     NOT NULL UNIQUE,
-    gender          TEXT    NOT NULL,
-    profile_picture VARCHAR(1000) NOT NULL,
-    bio             VARCHAR(1000) NOT NULL,
+    created_date    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    username        TEXT    NULL UNIQUE,
+    phone_no        INT     NULL UNIQUE,
+    gender          TEXT    NULL,
+    profile_picture VARCHAR(1000) NULL,
+    bio             VARCHAR(1000) NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 CREATE TABLE creators (

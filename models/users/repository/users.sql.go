@@ -5,8 +5,24 @@ package repository
 
 import (
 	"context"
-	"time"
+	"database/sql"
 )
+
+const createConsumer = `-- name: CreateConsumer :one
+INSERT INTO consumers(
+  fanfit_user_id
+) VALUES(
+  $1
+)
+RETURNING fanfit_user_id
+`
+
+func (q *Queries) CreateConsumer(ctx context.Context, fanfitUserID int32) (int32, error) {
+	row := q.db.QueryRowContext(ctx, createConsumer, fanfitUserID)
+	var fanfit_user_id int32
+	err := row.Scan(&fanfit_user_id)
+	return fanfit_user_id, err
+}
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users ( 
@@ -14,6 +30,7 @@ INSERT INTO users (
   last_name, 
   email,
   created_date,
+  user_type_id,
   username,
   phone_no,
   gender,
@@ -28,21 +45,23 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9,
+  $10
 )
-RETURNING id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
+RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
 
 type CreateUserParams struct {
 	FirstName      string
 	LastName       string
 	Email          string
-	CreatedDate    time.Time
-	Username       string
-	PhoneNo        int32
-	Gender         string
-	ProfilePicture string
-	Bio            string
+	CreatedDate    interface{}
+	UserTypeID     int32
+	Username       sql.NullString
+	PhoneNo        sql.NullInt32
+	Gender         sql.NullString
+	ProfilePicture sql.NullString
+	Bio            sql.NullString
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -51,6 +70,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.LastName,
 		arg.Email,
 		arg.CreatedDate,
+		arg.UserTypeID,
 		arg.Username,
 		arg.PhoneNo,
 		arg.Gender,
@@ -60,6 +80,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.UserTypeID,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
@@ -76,7 +97,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
-RETURNING id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
+RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
@@ -84,6 +105,7 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.UserTypeID,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
@@ -98,7 +120,7 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio FROM users 
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio FROM users 
 WHERE email = $1
 `
 
@@ -107,6 +129,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.UserTypeID,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,

@@ -7,6 +7,7 @@ import (
 )
 
 type Querier interface {
+	CreateConsumer(ctx context.Context, fanfitUserID int32) (int32, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteUser(ctx context.Context, email string) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)

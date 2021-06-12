@@ -12,6 +12,7 @@ type Service interface {
 	GetByEmail(context.Context, string) (repository.User, error)
 	Create(context.Context, repository.User) (repository.User, error)
 	Delete(context.Context, string) error
+	CreateConsumer(context.Context, int32) (int32, error)
 }
 
 type service struct {
@@ -25,6 +26,11 @@ func New(repository repository.Repository) Service {
 
 func (service *service) GetByEmail(ctx context.Context, id string) (repository.User, error) {
 	return service.repository.GetByEmail(ctx, id)
+}
+
+func (service *service) CreateConsumer(ctx context.Context, input int32) (int32, error) {
+	fmt.Print("Going into repo")
+	return service.repository.CreateConsumer(ctx, input)
 }
 
 func (service *service) Create(ctx context.Context, input repository.User) (repository.User, error) {

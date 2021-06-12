@@ -16,3 +16,5 @@ vendor/
 
 *.html
 coverage
+
+*.DS_Store*

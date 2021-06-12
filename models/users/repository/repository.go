@@ -12,6 +12,8 @@ type Repository interface {
 	Create(context.Context, User) (User, error)
 
 	Delete(context.Context, string) error
+
+	CreateConsumer(context.Context, int32) (int32, error)
 }
 
 type repository struct {
@@ -31,9 +33,16 @@ func (repo *repository) GetByEmail(ctx context.Context, email string) (User, err
 // Create function adds a node to the graph - typically invoked by customer API not guard-my-app
 func (repo *repository) Create(ctx context.Context, user User) (User, error) {
 	response, err := repo.queries.CreateUser(ctx, CreateUserParams{
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-		Email:     user.Email,
+		FirstName:      user.FirstName,
+		LastName:       user.LastName,
+		Email:          user.Email,
+		UserTypeID:     user.UserTypeID,
+		CreatedDate:    user.CreatedDate,
+		Username:       user.Username,
+		PhoneNo:        user.PhoneNo,
+		Gender:         user.Gender,
+		ProfilePicture: user.ProfilePicture,
+		Bio:            user.Bio,
 	})
 
 	if err != nil {
@@ -51,4 +60,14 @@ func NewUserStore(db DBTX) Repository {
 	return &repository{
 		queries: New(db),
 	}
+}
+
+// Create Users
+func (repo *repository) CreateConsumer(ctx context.Context, ID int32) (int32, error) {
+	response, err := repo.queries.CreateConsumer(ctx, ID)
+
+	if err != nil {
+		fmt.Print(err)
+	}
+	return response, err
 }
