@@ -29,7 +29,6 @@ INSERT INTO users (
   first_name,
   last_name, 
   email,
-  created_date,
   user_type_id,
   username,
   phone_no,
@@ -45,8 +44,7 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9,
-  $10
+  $9
 )
 RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
@@ -55,10 +53,9 @@ type CreateUserParams struct {
 	FirstName      string
 	LastName       string
 	Email          string
-	CreatedDate    interface{}
 	UserTypeID     int32
 	Username       sql.NullString
-	PhoneNo        sql.NullInt32
+	PhoneNo        sql.NullString
 	Gender         sql.NullString
 	ProfilePicture sql.NullString
 	Bio            sql.NullString
@@ -69,7 +66,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.FirstName,
 		arg.LastName,
 		arg.Email,
-		arg.CreatedDate,
 		arg.UserTypeID,
 		arg.Username,
 		arg.PhoneNo,

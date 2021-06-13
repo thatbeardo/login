@@ -37,7 +37,6 @@ func (repo *repository) Create(ctx context.Context, user User) (User, error) {
 		LastName:       user.LastName,
 		Email:          user.Email,
 		UserTypeID:     user.UserTypeID,
-		CreatedDate:    user.CreatedDate,
 		Username:       user.Username,
 		PhoneNo:        user.PhoneNo,
 		Gender:         user.Gender,

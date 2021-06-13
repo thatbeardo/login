@@ -7,7 +7,6 @@ INSERT INTO users (
   first_name,
   last_name, 
   email,
-  created_date,
   user_type_id,
   username,
   phone_no,
@@ -23,8 +22,7 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9,
-  $10
+  $9
 )
 RETURNING *;
 

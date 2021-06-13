@@ -4,6 +4,7 @@ package repository
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Consumer struct {
@@ -23,9 +24,9 @@ type User struct {
 	FirstName      string
 	LastName       string
 	Email          string
-	CreatedDate    interface{}
+	CreatedDate    time.Time
 	Username       sql.NullString
-	PhoneNo        sql.NullInt32
+	PhoneNo        sql.NullString
 	Gender         sql.NullString
 	ProfilePicture sql.NullString
 	Bio            sql.NullString
