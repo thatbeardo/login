@@ -13,11 +13,35 @@ type Repository interface {
 
 	Delete(context.Context, string) error
 
-	CreateConsumer(context.Context, int32) (int32, error)
+	CreateConsumer(context.Context, Consumer) (Consumer, error)
+
+	GetCreator(context.Context, int32) (Creator, error)
+	GetConsumer(context.Context, int32) (Consumer, error)
 }
 
 type repository struct {
 	queries *Queries
+}
+
+// GetCreator with fan_fit_userid
+func (repo *repository) GetCreator(ctx context.Context, FanfitUserID int32) (Creator, error) {
+	response, err := repo.queries.GetCreator(ctx, FanfitUserID)
+
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	return response, err
+
+}
+
+// GetConsumer
+func (repo *repository) GetConsumer(ctx context.Context, FanfitUserID int32) (Consumer, error) {
+	response, err := repo.queries.GetConsumer(ctx, FanfitUserID)
+	if err != nil {
+		fmt.Print(err)
+	}
+	return response, err
 }
 
 // GetByID function adds a resource node
@@ -62,8 +86,11 @@ func NewUserStore(db DBTX) Repository {
 }
 
 // Create Users
-func (repo *repository) CreateConsumer(ctx context.Context, ID int32) (int32, error) {
-	response, err := repo.queries.CreateConsumer(ctx, ID)
+func (repo *repository) CreateConsumer(ctx context.Context, cons Consumer) (Consumer, error) {
+	response, err := repo.queries.CreateConsumer(ctx, CreateConsumerParams{
+		FanfitUserID: cons.FanfitUserID,
+		TempField:    cons.TempField,
+	})
 
 	if err != nil {
 		fmt.Print(err)

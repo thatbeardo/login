@@ -26,6 +26,7 @@ CREATE TABLE creators (
 );
 CREATE TABLE consumers (
     fanfit_user_id      SERIAL     NOT NULL,
+    temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );

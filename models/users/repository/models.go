@@ -9,6 +9,7 @@ import (
 
 type Consumer struct {
 	FanfitUserID int32
+	TempField    sql.NullString
 }
 
 type Creator struct {
