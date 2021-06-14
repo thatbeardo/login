@@ -6,6 +6,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createConsumer = `-- name: CreateConsumer :one
@@ -174,14 +175,44 @@ func (q *Queries) GetConsumer(ctx context.Context, fanfitUserID int32) (Consumer
 }
 
 const getCreator = `-- name: GetCreator :one
-SELECT fanfit_user_id, payment_info, logo_picture, background_picture FROM creators
-WHERE fanfit_user_id = $1
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, payment_info, logo_picture, background_picture FROM users
+INNER JOIN creators on creators.fanfit_user_id = users.id
+WHERE users.email = $1
 `
 
-func (q *Queries) GetCreator(ctx context.Context, fanfitUserID int32) (Creator, error) {
-	row := q.db.QueryRowContext(ctx, getCreator, fanfitUserID)
-	var i Creator
+type GetCreatorRow struct {
+	ID                int32
+	UserTypeID        int32
+	FirstName         string
+	LastName          string
+	Email             string
+	CreatedDate       time.Time
+	Username          sql.NullString
+	PhoneNo           sql.NullString
+	Gender            sql.NullString
+	ProfilePicture    sql.NullString
+	Bio               sql.NullString
+	FanfitUserID      int32
+	PaymentInfo       string
+	LogoPicture       string
+	BackgroundPicture string
+}
+
+func (q *Queries) GetCreator(ctx context.Context, email string) (GetCreatorRow, error) {
+	row := q.db.QueryRowContext(ctx, getCreator, email)
+	var i GetCreatorRow
 	err := row.Scan(
+		&i.ID,
+		&i.UserTypeID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
 		&i.FanfitUserID,
 		&i.PaymentInfo,
 		&i.LogoPicture,

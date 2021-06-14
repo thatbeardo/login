@@ -2,13 +2,15 @@
 SELECT * FROM users 
 WHERE email = $1;
 
--- name: GetConsumer :one
-SELECT * FROM consumers
-WHERE fanfit_user_id = $1;
+-- name: GetClient :one
+SELECT * FROM users
+INNER JOIN consumers on consumers.fanfit_user_id = users.id
+WHERE users.email = $1;
 
 -- name: GetCreator :one
-SELECT * FROM creators
-WHERE fanfit_user_id = $1;
+SELECT * FROM users
+INNER JOIN creators on creators.fanfit_user_id = users.id
+WHERE users.email = $1;
 
 -- name: CreateUser :one
 INSERT INTO users ( 

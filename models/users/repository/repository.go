@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 )
 
@@ -13,9 +14,9 @@ type Repository interface {
 
 	Delete(context.Context, string) error
 
-	CreateConsumer(context.Context, Consumer) (Consumer, error)
+	CreateConsumer(context.Context, int32) (Consumer, error)
 
-	GetCreator(context.Context, int32) (Creator, error)
+	GetCreator(context.Context, string) (GetCreatorRow, error)
 	GetConsumer(context.Context, int32) (Consumer, error)
 }
 
@@ -24,8 +25,8 @@ type repository struct {
 }
 
 // GetCreator with fan_fit_userid
-func (repo *repository) GetCreator(ctx context.Context, FanfitUserID int32) (Creator, error) {
-	response, err := repo.queries.GetCreator(ctx, FanfitUserID)
+func (repo *repository) GetCreator(ctx context.Context, emailID string) (GetCreatorRow, error) {
+	response, err := repo.queries.GetCreator(ctx, emailID)
 
 	if err != nil {
 		fmt.Print(err)
@@ -86,10 +87,14 @@ func NewUserStore(db DBTX) Repository {
 }
 
 // Create Users
-func (repo *repository) CreateConsumer(ctx context.Context, cons Consumer) (Consumer, error) {
+func (repo *repository) CreateConsumer(ctx context.Context, userID int32) (Consumer, error) {
+	var temp sql.NullString
+	temp.String = "blank"
+	temp.Valid = true
+
 	response, err := repo.queries.CreateConsumer(ctx, CreateConsumerParams{
-		FanfitUserID: cons.FanfitUserID,
-		TempField:    cons.TempField,
+		FanfitUserID: userID,
+		TempField:    temp,
 	})
 
 	if err != nil {

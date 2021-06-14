@@ -33,3 +33,12 @@ CREATE TABLE consumers (
 
 INSERT INTO user_types(id, disc) VALUES(0, 'Creator');
 INSERT INTO user_types(id, disc) VALUES(1, 'Consumer');
+
+-- INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+-- VALUES(0, 'Scott', 'Mathison', 'scott@gmail.com', 'scottMath', '792-985-1998',
+-- 'Male', 'test_profile_picture', 'Love working with bodyweight to build strenght and power!');
+-- INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture) 
+-- VALUES(1, 'rwbrtb', 'test_image', 'test_image');
+
+-- SELECT * FROM users
+-- INNER JOIN creators on creators.fanfit_user_id = users.id;
