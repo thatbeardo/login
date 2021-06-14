@@ -162,15 +162,46 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	return i, err
 }
 
-const getConsumer = `-- name: GetConsumer :one
-SELECT fanfit_user_id, temp_field FROM consumers
-WHERE fanfit_user_id = $1
+const getClient = `-- name: GetClient :one
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users
+INNER JOIN consumers on consumers.fanfit_user_id = users.id
+WHERE users.email = $1
 `
 
-func (q *Queries) GetConsumer(ctx context.Context, fanfitUserID int32) (Consumer, error) {
-	row := q.db.QueryRowContext(ctx, getConsumer, fanfitUserID)
-	var i Consumer
-	err := row.Scan(&i.FanfitUserID, &i.TempField)
+type GetClientRow struct {
+	ID             int32
+	UserTypeID     int32
+	FirstName      string
+	LastName       string
+	Email          string
+	CreatedDate    time.Time
+	Username       sql.NullString
+	PhoneNo        sql.NullString
+	Gender         sql.NullString
+	ProfilePicture sql.NullString
+	Bio            sql.NullString
+	FanfitUserID   int32
+	TempField      sql.NullString
+}
+
+func (q *Queries) GetClient(ctx context.Context, email string) (GetClientRow, error) {
+	row := q.db.QueryRowContext(ctx, getClient, email)
+	var i GetClientRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserTypeID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+		&i.FanfitUserID,
+		&i.TempField,
+	)
 	return i, err
 }
 

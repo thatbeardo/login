@@ -8,16 +8,17 @@ import (
 
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
-	GetByEmail(context.Context, string) (User, error)
-
+	// CREATES
 	Create(context.Context, User) (User, error)
-
-	Delete(context.Context, string) error
-
 	CreateConsumer(context.Context, int32) (Consumer, error)
 
+	// DELETES
+	Delete(context.Context, string) error
+
+	// GETS
+	GetByEmail(context.Context, string) (User, error)
 	GetCreator(context.Context, string) (GetCreatorRow, error)
-	GetConsumer(context.Context, int32) (Consumer, error)
+	GetClient(context.Context, string) (GetClientRow, error)
 }
 
 type repository struct {
@@ -37,8 +38,8 @@ func (repo *repository) GetCreator(ctx context.Context, emailID string) (GetCrea
 }
 
 // GetConsumer
-func (repo *repository) GetConsumer(ctx context.Context, FanfitUserID int32) (Consumer, error) {
-	response, err := repo.queries.GetConsumer(ctx, FanfitUserID)
+func (repo *repository) GetClient(ctx context.Context, emailID string) (GetClientRow, error) {
+	response, err := repo.queries.GetClient(ctx, emailID)
 	if err != nil {
 		fmt.Print(err)
 	}

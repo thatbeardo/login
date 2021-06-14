@@ -9,12 +9,17 @@ import (
 
 // Service receives commands from handlers and forwards them to the repository
 type Service interface {
-	GetByEmail(context.Context, string) (repository.User, error)
+	// CREATES
 	Create(context.Context, repository.User) (repository.User, error)
-	Delete(context.Context, string) error
-	GetConsumer(context.Context, int32) (repository.Consumer, error)
-	GetCreator(context.Context, string) (repository.GetCreatorRow, error)
 	CreateConsumer(context.Context, int32) (repository.Consumer, error)
+
+	// DELETES
+	Delete(context.Context, string) error
+
+	// GETS
+	GetByEmail(context.Context, string) (repository.User, error)
+	GetClient(context.Context, string) (repository.GetClientRow, error)
+	GetCreator(context.Context, string) (repository.GetCreatorRow, error)
 }
 
 type service struct {
@@ -26,8 +31,8 @@ func New(repository repository.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (service *service) GetConsumer(ctx context.Context, input int32) (repository.Consumer, error) {
-	return service.repository.GetConsumer(ctx, input)
+func (service *service) GetClient(ctx context.Context, emailID string) (repository.GetClientRow, error) {
+	return service.repository.GetClient(ctx, emailID)
 }
 
 func (service *service) GetCreator(ctx context.Context, email string) (repository.GetCreatorRow, error) {

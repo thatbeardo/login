@@ -1,6 +1,6 @@
 CREATE TABLE user_types (
-    id      INT PRIMARY KEY,
-    disc    TEXT NOT NULL
+    id              INT PRIMARY KEY,
+    description     TEXT NOT NULL
 );
 CREATE TABLE users (
     id              SERIAL     PRIMARY KEY,
@@ -17,7 +17,7 @@ CREATE TABLE users (
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 CREATE TABLE creators (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
     background_picture  TEXT    NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE creators (
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
 CREATE TABLE consumers (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
     temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
