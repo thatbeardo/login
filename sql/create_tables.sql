@@ -32,14 +32,31 @@ CREATE TABLE consumers (
 );
 
 
-INSERT INTO user_types(id, disc) VALUES(0, 'Creator');
-INSERT INTO user_types(id, disc) VALUES(1, 'Consumer');
 
--- INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
--- VALUES(0, 'Scott', 'Mathison', 'scott@gmail.com', 'scottMath', '792-985-1998',
--- 'Male', 'test_profile_picture', 'Love working with bodyweight to build strenght and power!');
--- INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture) 
--- VALUES(1, 'rwbrtb', 'test_image', 'test_image');
+
+
+INSERT INTO user_types(id, description) VALUES(0, 'Creator');
+INSERT INTO user_types(id, description) VALUES(1, 'Consumer');
+
+INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+VALUES(0, 'Scott', 'Mathison', 'scott@gmail.com', 'scottMath', '792-985-1998',
+'Male', 'test_profile_picture', 'Love working with bodyweight to build strenght and power!');
+INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture) 
+VALUES(1, 'rwbrtb', 'test_image', 'test_image');
+
+-- MAKING THE FUNCTION TO CALL
+-- DO InsertCreator 
+-- DECLARE
+--     last_id INTEGER;
+-- BEGIN
+-- 	INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+-- 	VALUES(0, 'Scott', 'Mathison', 'scotdvt@gmail.com', 'scotdfvtMath', '791-985-1998',
+-- 		   'Male', 'test_profile_picture', 'Love working with bodyweight to build strenght and power!')
+--     RETURNING users.id INTO last_id;
+	  
+-- 	INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture) 
+-- 	VALUES(last_id, 'rwbrtb', 'test_image', 'test_image');
+-- END InsertCreator; 
 
 
 -- Inserts a new creator
@@ -50,7 +67,7 @@ INSERT INTO user_types(id, disc) VALUES(1, 'Consumer');
 -- 	INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
 -- 	VALUES(0, 'Scott', 'Mathison', 'scotdvt@gmail.com', 'scotdfvtMath', '791-985-1998',
 -- 		   'Male', 'test_profile_picture', 'Love working with bodyweight to build strenght and power!')
---       RETURNING users.id INTO last_id;
+--     RETURNING users.id INTO last_id;
 	  
 -- 	INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture) 
 -- 	VALUES(last_id, 'rwbrtb', 'test_image', 'test_image');
@@ -69,3 +86,45 @@ INSERT INTO user_types(id, disc) VALUES(1, 'Consumer');
 -- 	INSERT INTO consumers(fanfit_user_id) 
 -- 	VALUES(last_id);
 -- END $$;
+
+
+-- CREATE OR REPLACE FUNCTION P_SHOPIFY_FULFILLMENT_LOAD (
+--     p_id                                    text,
+--     p_invoice_id                            text,
+--     p_tracking_number                       text)
+--  RETURNS void
+--     LANGUAGE plpgsql
+--     AS $$
+-- DECLARE
+--     l_invoice_id                            numeric;
+-- 	l_sales_channel_shipment_id             text;
+-- BEGIN
+-- 	BEGIN
+-- 	    SELECT
+-- 	        invoice_id
+-- 	    INTO
+-- 	        l_invoice_id
+-- 	    FROM
+-- 	        invoice
+-- 	    WHERE
+-- 	        sales_channel_order_id = p_invoice_id AND
+-- 	        sales_channel_code = 'S';
+-- 	EXCEPTION
+-- 	    When NO_DATA_FOUND THEN l_invoice_id := NULL;
+-- 	END;
+--     IF l_invoice_id IS NULL THEN
+--         NULL;
+--     ELSE
+	
+--         BEGIN
+--             SELECT
+--                 sales_channel_shipment_id
+--             INTO
+--                 l_sales_channel_shipment_id
+--             FROM
+--                 shipment
+--             WHERE
+--                 invoice_id = l_invoice_id AND
+--                 sales_channel_shipment_id = p_id ;
+--         EXCEPTION
+--             WHEN NO_DATA_FO

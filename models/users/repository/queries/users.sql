@@ -7,10 +7,12 @@ SELECT * FROM users
 INNER JOIN consumers on consumers.fanfit_user_id = users.id
 WHERE users.email = $1;
 
+
 -- name: GetCreator :one
 SELECT * FROM users
 INNER JOIN creators on creators.fanfit_user_id = users.id
 WHERE users.email = $1;
+
 
 -- name: CreateUser :one
 INSERT INTO users ( 
