@@ -3,18 +3,37 @@
 package repository
 
 import (
+	"database/sql"
 	"time"
 )
 
+type Consumer struct {
+	FanfitUserID int32
+	TempField    sql.NullString
+}
+
+type Creator struct {
+	FanfitUserID      int32
+	PaymentInfo       string
+	LogoPicture       string
+	BackgroundPicture string
+}
+
 type User struct {
 	ID             int32
+	UserTypeID     int32
 	FirstName      string
 	LastName       string
 	Email          string
 	CreatedDate    time.Time
-	Username       string
-	PhoneNo        int32
-	Gender         string
-	ProfilePicture string
-	Bio            string
+	Username       sql.NullString
+	PhoneNo        sql.NullString
+	Gender         sql.NullString
+	ProfilePicture sql.NullString
+	Bio            sql.NullString
+}
+
+type UserType struct {
+	ID          int32
+	Description string
 }

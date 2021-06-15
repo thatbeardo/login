@@ -23,16 +23,24 @@ import (
 func post(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input repository.User
-		if err := c.ShouldBind(&input); err != nil {
-			views.Wrap(err, c)
+		if err1 := c.ShouldBind(&input); err1 != nil {
+			views.Wrap(err1, c)
 			return
 		}
+
 		fmt.Println("About to create")
-		response, err := service.Create(c.Request.Context(), input)
-		if err != nil {
-			views.Wrap(err, c)
+		response, err2 := service.Create(c.Request.Context(), input)
+		if err2 != nil {
+			views.Wrap(err2, c)
 			return
 		}
-		c.JSON(http.StatusAccepted, response)
+
+		consumer, err3 := service.CreateConsumer(c.Request.Context(), response.ID)
+		if err3 != nil {
+			views.Wrap(err3, c)
+			return
+		}
+
+		c.JSON(http.StatusAccepted, consumer)
 	}
 }
