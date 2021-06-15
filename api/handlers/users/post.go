@@ -35,12 +35,18 @@ func post(service service.Service) gin.HandlerFunc {
 			return
 		}
 
-		consumer, err3 := service.CreateConsumer(c.Request.Context(), response.ID)
+		_, err3 := service.CreateConsumer(c.Request.Context(), response.ID)
 		if err3 != nil {
 			views.Wrap(err3, c)
 			return
 		}
 
-		c.JSON(http.StatusAccepted, consumer)
+		fullConsumer, err4 := service.GetClient(c.Request.Context(), response.Email)
+		if err4 != nil {
+			views.Wrap(err4, c)
+			return
+		}
+
+		c.JSON(http.StatusAccepted, fullConsumer)
 	}
 }
