@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+type Creator struct {
+	FanfitUserID      int32
+	PaymentInfo       string
+	LogoPicture       string
+	BackgroundPicture string
+}
+
 type User struct {
 	ID             int32
 	UserTypeID     int32

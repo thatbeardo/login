@@ -8,68 +8,6 @@ import (
 	"database/sql"
 )
 
-const createConsumer = `-- name: CreateConsumer :one
-INSERT INTO consumers(
-  fanfit_user_id,
-  temp_field
-) VALUES(
-  $1,
-  $2
-)
-RETURNING fanfit_user_id, temp_field
-`
-
-type CreateConsumerParams struct {
-	FanfitUserID int32
-	TempField    sql.NullString
-}
-
-func (q *Queries) CreateConsumer(ctx context.Context, arg CreateConsumerParams) (Consumer, error) {
-	row := q.db.QueryRowContext(ctx, createConsumer, arg.FanfitUserID, arg.TempField)
-	var i Consumer
-	err := row.Scan(&i.FanfitUserID, &i.TempField)
-	return i, err
-}
-
-const createCreator = `-- name: CreateCreator :one
-INSERT INTO creators(
-  fanfit_user_id,
-  payment_info,
-  logo_picture,
-  background_picture
-) VALUES(
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING fanfit_user_id, payment_info, logo_picture, background_picture
-`
-
-type CreateCreatorParams struct {
-	FanfitUserID      int32
-	PaymentInfo       string
-	LogoPicture       string
-	BackgroundPicture string
-}
-
-func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error) {
-	row := q.db.QueryRowContext(ctx, createCreator,
-		arg.FanfitUserID,
-		arg.PaymentInfo,
-		arg.LogoPicture,
-		arg.BackgroundPicture,
-	)
-	var i Creator
-	err := row.Scan(
-		&i.FanfitUserID,
-		&i.PaymentInfo,
-		&i.LogoPicture,
-		&i.BackgroundPicture,
-	)
-	return i, err
-}
-
 const createUser = `-- name: CreateUser :one
 INSERT INTO users ( 
   first_name,
@@ -90,7 +28,7 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9 
 )
 RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
@@ -157,35 +95,6 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 		&i.Gender,
 		&i.ProfilePicture,
 		&i.Bio,
-	)
-	return i, err
-}
-
-const getConsumer = `-- name: GetConsumer :one
-SELECT fanfit_user_id, temp_field FROM consumers
-WHERE fanfit_user_id = $1
-`
-
-func (q *Queries) GetConsumer(ctx context.Context, fanfitUserID int32) (Consumer, error) {
-	row := q.db.QueryRowContext(ctx, getConsumer, fanfitUserID)
-	var i Consumer
-	err := row.Scan(&i.FanfitUserID, &i.TempField)
-	return i, err
-}
-
-const getCreator = `-- name: GetCreator :one
-SELECT fanfit_user_id, payment_info, logo_picture, background_picture FROM creators
-WHERE fanfit_user_id = $1
-`
-
-func (q *Queries) GetCreator(ctx context.Context, fanfitUserID int32) (Creator, error) {
-	row := q.db.QueryRowContext(ctx, getCreator, fanfitUserID)
-	var i Creator
-	err := row.Scan(
-		&i.FanfitUserID,
-		&i.PaymentInfo,
-		&i.LogoPicture,
-		&i.BackgroundPicture,
 	)
 	return i, err
 }

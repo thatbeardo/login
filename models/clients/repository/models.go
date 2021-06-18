@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+type Client struct {
+	FanfitUserID int32
+	TempField    sql.NullString
+}
+
 type User struct {
 	ID             int32
 	UserTypeID     int32

@@ -13,9 +13,10 @@ CREATE TABLE users (
     phone_no        TEXT    NULL UNIQUE,
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
-    bio             VARCHAR(1000) NULL,
+       bio             VARCHAR(1000) NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
+
 CREATE TABLE creators (
     fanfit_user_id      SERIAL     NOT NULL,
     payment_info        TEXT    NOT NULL,
@@ -24,12 +25,4 @@ CREATE TABLE creators (
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
-CREATE TABLE clients (
-    fanfit_user_id      SERIAL     NOT NULL,
-    PRIMARY KEY (fanfit_user_id),
-    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
-);
 
-
-INSERT INTO user_types(id, disc) VALUES(0, 'Creator');
-INSERT INTO user_types(id, disc) VALUES(1, 'Clients');

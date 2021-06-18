@@ -1,12 +1,12 @@
-package users
+package clients
 
 import (
 	"fmt"
 	"net/http"
 
 	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/users/repository"
-	"github.com/fanfit/userservice/models/users/service"
+	"github.com/fanfit/userservice/models/clients/repository"
+	"github.com/fanfit/userservice/models/clients/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,13 +22,13 @@ import (
 // @Router /v1/users/ [post]
 func post(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var input repository.User
+		var input repository.Client
 		if err := c.ShouldBind(&input); err != nil {
 			views.Wrap(err, c)
 			return
 		}
 		fmt.Println("About to create")
-		response, err := service.Create(c.Request.Context(), input)
+		response, err := service.CreateClients(c.Request.Context(), input)
 		if err != nil {
 			views.Wrap(err, c)
 			return

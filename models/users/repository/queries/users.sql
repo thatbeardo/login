@@ -2,13 +2,6 @@
 SELECT * FROM users 
 WHERE email = $1;
 
--- name: GetConsumer :one
-SELECT * FROM consumers
-WHERE fanfit_user_id = $1;
-
--- name: GetCreator :one
-SELECT * FROM creators
-WHERE fanfit_user_id = $1;
 
 -- name: CreateUser :one
 INSERT INTO users ( 
@@ -30,39 +23,14 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9 
 )
 RETURNING *;
 
--- name: CreateConsumer :one
-INSERT INTO consumers(
-  fanfit_user_id,
-  temp_field
-) VALUES(
-  $1,
-  $2
-)
-RETURNING *;
-
--- name: CreateCreator :one
-INSERT INTO creators(
-  fanfit_user_id,
-  payment_info,
-  logo_picture,
-  background_picture
-) VALUES(
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING *;
 
 
 -- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
 RETURNING *;
-
-
 

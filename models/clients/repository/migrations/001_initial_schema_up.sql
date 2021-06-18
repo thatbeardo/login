@@ -16,20 +16,10 @@ CREATE TABLE users (
     bio             VARCHAR(1000) NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
-CREATE TABLE creators (
-    fanfit_user_id      SERIAL     NOT NULL,
-    payment_info        TEXT    NOT NULL,
-    logo_picture        TEXT    NOT NULL,
-    background_picture  TEXT    NOT NULL,
-    PRIMARY KEY (fanfit_user_id),
-    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
-);
+
 CREATE TABLE clients (
     fanfit_user_id      SERIAL     NOT NULL,
+    temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
-
-
-INSERT INTO user_types(id, disc) VALUES(0, 'Creator');
-INSERT INTO user_types(id, disc) VALUES(1, 'Clients');
