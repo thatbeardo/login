@@ -1,6 +1,6 @@
 CREATE TABLE user_types (
     id      INT PRIMARY KEY,
-    desciption    TEXT NOT NULL
+    description    TEXT NOT NULL
 );
 CREATE TABLE users (
     id              SERIAL     PRIMARY KEY,
@@ -31,8 +31,8 @@ CREATE TABLE clients (
 );
 
 
-INSERT INTO user_types(id, disc) VALUES(0, 'Creator');
-INSERT INTO user_types(id, disc) VALUES(1, 'Clients');
+INSERT INTO user_types(id, description) VALUES(0, 'Creator');
+INSERT INTO user_types(id, description) VALUES(1, 'Clients');
 
 -- Inserts a new creator
 DO $$

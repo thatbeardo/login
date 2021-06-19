@@ -22,6 +22,6 @@ type User struct {
 }
 
 type UserType struct {
-	ID   int32
-	Disc string
+	ID          int32
+	Description string
 }

@@ -1,6 +1,6 @@
 CREATE TABLE user_types (
     id      INT PRIMARY KEY,
-    desciption    TEXT NOT NULL
+    description    TEXT NOT NULL
 );
 CREATE TABLE users (
     id              SERIAL     PRIMARY KEY,
