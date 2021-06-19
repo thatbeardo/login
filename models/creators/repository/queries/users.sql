@@ -16,6 +16,6 @@ RETURNING *;
 
 
 -- name: GetCreator :one
-SELECT * FROM users FULL OUTER JOIN creators
+SELECT * FROM users INNER JOIN creators
 ON users.fanfit_user_id = creators.fanfit_user_id
-WHERE fanfit_user_id = $1;
+WHERE email = $1;

@@ -8,7 +8,7 @@ import (
 
 type Querier interface {
 	CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error)
-	GetCreator(ctx context.Context, fanfitUserID int32) (GetCreatorRow, error)
+	GetCreator(ctx context.Context, email string) (GetCreatorRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

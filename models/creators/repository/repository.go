@@ -7,7 +7,7 @@ import (
 
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
-	GetCreator(context.Context, int32) (GetCreatorRow, error)
+	GetCreator(context.Context, string) (GetCreatorRow, error)
 	CreateCreator(context.Context, Creator) (Creator, error)
 }
 
@@ -16,7 +16,7 @@ type repository struct {
 }
 
 // GetCreator with fan_fit_userid
-func (repo *repository) GetCreator(ctx context.Context, FanfitUserID int32) (GetCreatorRow, error) {
+func (repo *repository) GetCreator(ctx context.Context, FanfitUserID string) (GetCreatorRow, error) {
 	temp, err := repo.queries.GetCreator(ctx, FanfitUserID)
 
 	if err != nil {

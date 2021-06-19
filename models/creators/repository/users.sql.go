@@ -49,9 +49,9 @@ func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (C
 }
 
 const getCreator = `-- name: GetCreator :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, payment_info, logo_picture, background_picture FROM users FULL OUTER JOIN creators
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, payment_info, logo_picture, background_picture FROM users INNER JOIN creators
 ON users.fanfit_user_id = creators.fanfit_user_id
-WHERE fanfit_user_id = $1
+WHERE email = $1
 `
 
 type GetCreatorRow struct {
@@ -72,8 +72,8 @@ type GetCreatorRow struct {
 	BackgroundPicture string
 }
 
-func (q *Queries) GetCreator(ctx context.Context, fanfitUserID int32) (GetCreatorRow, error) {
-	row := q.db.QueryRowContext(ctx, getCreator, fanfitUserID)
+func (q *Queries) GetCreator(ctx context.Context, email string) (GetCreatorRow, error) {
+	row := q.db.QueryRowContext(ctx, getCreator, email)
 	var i GetCreatorRow
 	err := row.Scan(
 		&i.ID,
