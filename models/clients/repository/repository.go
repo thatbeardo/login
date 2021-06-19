@@ -9,7 +9,7 @@ import (
 type Repository interface {
 	Delete(context.Context, string) error
 	CreateClients(context.Context, Client) (Client, error)
-	GetClients(context.Context, int32) (GetClientsRow, error)
+	GetClients(context.Context, string) (GetClientsRow, error)
 }
 
 type repository struct {
@@ -17,7 +17,7 @@ type repository struct {
 }
 
 // GetClients
-func (repo *repository) GetClients(ctx context.Context, FanfitUserID int32) (GetClientsRow, error) {
+func (repo *repository) GetClients(ctx context.Context, FanfitUserID string) (GetClientsRow, error) {
 	response, err := repo.queries.GetClients(ctx, FanfitUserID)
 	if err != nil {
 		fmt.Print(err)

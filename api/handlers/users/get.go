@@ -3,8 +3,8 @@ package users
 import (
 	"net/http"
 
-	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/users/service"
+	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/login/models/users/service"
 	"github.com/gin-gonic/gin"
 )
 

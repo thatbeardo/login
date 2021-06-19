@@ -1,12 +1,12 @@
-package users
+package creators
 
 import (
 	"fmt"
 	"net/http"
 
-	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/creators/repository"
-	"github.com/fanfit/userservice/models/creators/service"
+	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/login/models/creators/repository"
+	"github.com/fanfit/login/models/creators/service"
 	"github.com/gin-gonic/gin"
 )
 

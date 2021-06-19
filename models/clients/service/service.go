@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/fanfit/userservice/models/clients/repository"
+	"github.com/fanfit/login/models/clients/repository"
 )
 
 // Service receives commands from handlers and forwards them to the repository
 type Service interface {
-	GetClients(context.Context, int32) (repository.GetClientsRow, error)
+	GetClients(context.Context, string) (repository.GetClientsRow, error)
 	CreateClients(context.Context, repository.Client) (repository.Client, error)
 }
 
@@ -22,7 +22,7 @@ func New(repository repository.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (service *service) GetClients(ctx context.Context, input int32) (repository.GetClientsRow, error) {
+func (service *service) GetClients(ctx context.Context, input string) (repository.GetClientsRow, error) {
 	return service.repository.GetClients(ctx, input)
 }
 

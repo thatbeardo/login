@@ -19,7 +19,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"github.com/fanfit/userservice/docs"
+	"github.com/fanfit/login/docs"
 )
 
 // GenerateRouter instantiates and initializes a new Router.

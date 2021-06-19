@@ -58,9 +58,9 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 }
 
 const getClients = `-- name: GetClients :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users FULL OUTER JOIN clients
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
 ON users.fanfit_user_id = clients.fanfit_user_id
-WHERE fanfit_user_id = $1
+WHERE email = $1
 `
 
 type GetClientsRow struct {
@@ -79,8 +79,8 @@ type GetClientsRow struct {
 	TempField      sql.NullString
 }
 
-func (q *Queries) GetClients(ctx context.Context, fanfitUserID int32) (GetClientsRow, error) {
-	row := q.db.QueryRowContext(ctx, getClients, fanfitUserID)
+func (q *Queries) GetClients(ctx context.Context, email string) (GetClientsRow, error) {
+	row := q.db.QueryRowContext(ctx, getClients, email)
 	var i GetClientsRow
 	err := row.Scan(
 		&i.ID,

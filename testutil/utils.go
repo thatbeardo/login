@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fanfit/userservice/api/views"
+	"github.com/fanfit/login/api/views"
 	"github.com/stretchr/testify/assert"
 )
 

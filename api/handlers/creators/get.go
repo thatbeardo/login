@@ -1,10 +1,10 @@
-package users
+package creators
 
 import (
 	"net/http"
 
-	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/users/service"
+	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/login/models/creators/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +22,7 @@ import (
 func getByID(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		emailID := c.Param("email_id")
-		resource, err := service.GetByEmail(c.Request.Context(), emailID)
+		resource, err := service.GetCreator(c.Request.Context(), emailID)
 		if err != nil {
 			views.Wrap(err, c)
 			return

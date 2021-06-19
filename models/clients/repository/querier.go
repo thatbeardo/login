@@ -9,7 +9,7 @@ import (
 type Querier interface {
 	CreateClients(ctx context.Context, arg CreateClientsParams) (Client, error)
 	DeleteUser(ctx context.Context, email string) (User, error)
-	GetClients(ctx context.Context, fanfitUserID int32) (GetClientsRow, error)
+	GetClients(ctx context.Context, email string) (GetClientsRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

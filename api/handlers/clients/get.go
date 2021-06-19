@@ -3,10 +3,8 @@ package clients
 import (
 	"net/http"
 
-	"strconv"
-
-	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/clients/service"
+	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/login/models/clients/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,9 +21,8 @@ import (
 // @Router /v1/users/{email_id} [get]
 func getByID(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fanfit_id := c.Param("email_id")
-		i, err := strconv.Atoi(fanfit_id)
-		resource, err := service.GetClients(c.Request.Context(), i)
+		fanfitID := c.Param("email_id")
+		resource, err := service.GetClients(c.Request.Context(), fanfitID)
 		if err != nil {
 			views.Wrap(err, c)
 			return

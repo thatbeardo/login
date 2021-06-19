@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	models "github.com/fanfit/userservice/models"
+	models "github.com/fanfit/login/models"
 	"github.com/gin-gonic/gin"
 )
 

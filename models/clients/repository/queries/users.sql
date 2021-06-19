@@ -18,6 +18,6 @@ RETURNING *;
 
 
 -- name: GetClients :one
-SELECT * FROM users FULL OUTER JOIN clients
+SELECT * FROM users INNER JOIN clients
 ON users.fanfit_user_id = clients.fanfit_user_id
-WHERE fanfit_user_id = $1;
+WHERE email = $1;

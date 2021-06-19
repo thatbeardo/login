@@ -1,7 +1,7 @@
-package users
+package creators
 
 import (
-	"github.com/fanfit/userservice/models/creators/service"
+	"github.com/fanfit/login/models/creators/service"
 	"github.com/gin-gonic/gin"
 )
 

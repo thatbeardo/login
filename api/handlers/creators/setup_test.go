@@ -1,28 +1,23 @@
-package users_test
+package creators_test
 
 import (
 	"context"
 
-	"github.com/fanfit/userservice/models/users/repository"
+	"github.com/fanfit/login/models/creators/repository"
 )
 
 type mockService struct {
-	GetByIDResponse repository.User
-	CreateResponse  repository.User
+	GetCreatorResponse    repository.GetCreatorRow
+	CreateCreatorResponse repository.Creator
 
-	GetByIDErr error
-	CreateErr  error
-	DeleteErr  error
+	GetClientError  error
+	CreateClientErr error
 }
 
-func (m mockService) GetByEmail(ctx context.Context, id string) (repository.User, error) {
-	return m.GetByIDResponse, m.GetByIDErr
+func (m mockService) GetCreator(ctx context.Context, id string) (repository.GetCreatorRow, error) {
+	return m.GetCreatorResponse, m.GetClientError
 }
 
-func (m mockService) Create(ctx context.Context, user repository.User) (repository.User, error) {
-	return m.CreateResponse, m.CreateErr
-}
-
-func (m mockService) Delete(ctx context.Context, id string) error {
-	return m.DeleteErr
+func (m mockService) CreateCreator(ctx context.Context, user repository.Creator) (repository.Creator, error) {
+	return m.CreateCreatorResponse, m.CreateClientErr
 }
