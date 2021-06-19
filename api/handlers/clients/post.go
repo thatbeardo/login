@@ -22,17 +22,18 @@ import (
 // @Router /v1/users/ [post]
 func post(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var input repository.Client
+		var input repository.User
 		if err := c.ShouldBind(&input); err != nil {
 			views.Wrap(err, c)
 			return
 		}
 		fmt.Println("About to create")
-		response, err := service.CreateClient(c.Request.Context(), input)
+		completeClient, err := service.CreateClient(c.Request.Context(), input.ID)
 		if err != nil {
 			views.Wrap(err, c)
 			return
 		}
-		c.JSON(http.StatusAccepted, response)
+
+		c.JSON(http.StatusAccepted, completeClient)
 	}
 }

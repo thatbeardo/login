@@ -7,6 +7,7 @@ import (
 	"github.com/fanfit/login/api/views"
 	"github.com/fanfit/login/models/users/repository"
 	"github.com/fanfit/login/models/users/service"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,11 +29,11 @@ func post(service service.Service) gin.HandlerFunc {
 			return
 		}
 		fmt.Println("About to create")
-		response, err := service.Create(c.Request.Context(), input)
+		newUser, err := service.Create(c.Request.Context(), input)
 		if err != nil {
 			views.Wrap(err, c)
 			return
 		}
-		c.JSON(http.StatusAccepted, response)
+		c.JSON(http.StatusAccepted, newUser)
 	}
 }

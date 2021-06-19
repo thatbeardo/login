@@ -20,3 +20,8 @@ RETURNING *;
 SELECT * FROM users INNER JOIN clients
 ON users.fanfit_user_id = clients.fanfit_user_id
 WHERE email = $1;
+
+-- name: GetClientByID :one
+SELECT * FROM users INNER JOIN clients
+ON users.fanfit_user_id = clients.fanfit_user_id
+WHERE fanfit_user_id = $1;

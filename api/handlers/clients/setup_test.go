@@ -8,7 +8,7 @@ import (
 
 type mockService struct {
 	GetClientResponse    repository.GetClientByEmailRow
-	CreateClientResponse repository.Client
+	CreateClientResponse repository.GetClientByIDRow
 
 	GetClientError  error
 	CreateClientErr error
@@ -18,6 +18,6 @@ func (m mockService) GetClientByEmail(ctx context.Context, id string) (repositor
 	return m.GetClientResponse, m.GetClientError
 }
 
-func (m mockService) CreateClient(ctx context.Context, user repository.Client) (repository.Client, error) {
+func (m mockService) CreateClient(ctx context.Context, user int32) (repository.GetClientByIDRow, error) {
 	return m.CreateClientResponse, m.CreateClientErr
 }

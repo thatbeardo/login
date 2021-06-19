@@ -2,13 +2,14 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 )
 
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
 	Delete(context.Context, string) error
-	CreateClient(context.Context, Client) (Client, error)
+	CreateClient(context.Context, int32) (GetClientByIDRow, error)
 	GetClientByEmail(context.Context, string) (GetClientByEmailRow, error)
 }
 
@@ -36,15 +37,18 @@ func NewUserStore(db DBTX) Repository {
 	}
 }
 
-// Create Users
-func (repo *repository) CreateClient(ctx context.Context, cons Client) (Client, error) {
+// Create Client
+func (repo *repository) CreateClient(ctx context.Context, userID int32) (GetClientByIDRow, error) {
 	response, err := repo.queries.CreateClient(ctx, CreateClientParams{
-		FanfitUserID: cons.FanfitUserID,
-		TempField:    cons.TempField,
+		FanfitUserID: userID,
+		TempField:    sql.NullString{},
 	})
-
 	if err != nil {
 		fmt.Print(err)
 	}
-	return response, err
+	client, err2 := repo.queries.GetClientByID(ctx, response.FanfitUserID)
+	if err2 != nil {
+		fmt.Print(err2)
+	}
+	return client, err2
 }

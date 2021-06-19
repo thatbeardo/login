@@ -99,3 +99,46 @@ func (q *Queries) GetClientByEmail(ctx context.Context, email string) (GetClient
 	)
 	return i, err
 }
+
+const getClientByID = `-- name: GetClientByID :one
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
+ON users.fanfit_user_id = clients.fanfit_user_id
+WHERE fanfit_user_id = $1
+`
+
+type GetClientByIDRow struct {
+	ID             int32
+	UserTypeID     int32
+	FirstName      string
+	LastName       string
+	Email          string
+	CreatedDate    time.Time
+	Username       sql.NullString
+	PhoneNo        sql.NullString
+	Gender         sql.NullString
+	ProfilePicture sql.NullString
+	Bio            sql.NullString
+	FanfitUserID   int32
+	TempField      sql.NullString
+}
+
+func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetClientByIDRow, error) {
+	row := q.db.QueryRowContext(ctx, getClientByID, fanfitUserID)
+	var i GetClientByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.UserTypeID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.CreatedDate,
+		&i.Username,
+		&i.PhoneNo,
+		&i.Gender,
+		&i.ProfilePicture,
+		&i.Bio,
+		&i.FanfitUserID,
+		&i.TempField,
+	)
+	return i, err
+}

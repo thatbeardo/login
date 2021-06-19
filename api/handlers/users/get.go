@@ -5,6 +5,7 @@ import (
 
 	"github.com/fanfit/login/api/views"
 	"github.com/fanfit/login/models/users/service"
+
 	"github.com/gin-gonic/gin"
 )
 
