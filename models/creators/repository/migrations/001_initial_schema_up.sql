@@ -18,7 +18,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE creators (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
     background_picture  TEXT    NOT NULL,

@@ -59,7 +59,7 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 
 const getClientByEmail = `-- name: GetClientByEmail :one
 SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
-ON users.fanfit_user_id = clients.fanfit_user_id
+ON users.id = clients.fanfit_user_id
 WHERE email = $1
 `
 
@@ -102,7 +102,7 @@ func (q *Queries) GetClientByEmail(ctx context.Context, email string) (GetClient
 
 const getClientByID = `-- name: GetClientByID :one
 SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
-ON users.fanfit_user_id = clients.fanfit_user_id
+ON users.id = clients.fanfit_user_id
 WHERE fanfit_user_id = $1
 `
 

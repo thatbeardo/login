@@ -50,7 +50,7 @@ func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (C
 
 const getCreatorByEmail = `-- name: GetCreatorByEmail :one
 SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, payment_info, logo_picture, background_picture FROM users INNER JOIN creators
-ON users.fanfit_user_id = creators.fanfit_user_id
+ON users.id = creators.fanfit_user_id
 WHERE email = $1
 `
 

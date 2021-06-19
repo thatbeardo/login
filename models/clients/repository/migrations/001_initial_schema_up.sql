@@ -18,7 +18,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE clients (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
     temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)

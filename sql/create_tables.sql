@@ -17,7 +17,7 @@ CREATE TABLE users (
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 CREATE TABLE creators (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
     background_picture  TEXT    NOT NULL,
@@ -25,7 +25,8 @@ CREATE TABLE creators (
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
 CREATE TABLE clients (
-    fanfit_user_id      SERIAL     NOT NULL,
+    fanfit_user_id      INT     NOT NULL,
+    temp_field          TEXT        NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
@@ -89,6 +90,7 @@ BEGIN
     INSERT INTO clients(fanfit_user_id)
     VALUES(last_id);
 END $$;
+
 -- Function to create clients: Finish implementing this and then just call it a bunch
 -- CREATE OR REPLACE FUNCTION P_CREATE_NEW_CLIENT (
 --  p_user_type_id  INTEGER,
