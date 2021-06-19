@@ -7,8 +7,10 @@ import (
 )
 
 type Querier interface {
+	CreateClient(ctx context.Context, arg CreateClientParams) (Client, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteUser(ctx context.Context, email string) (User, error)
+	GetClientByID(ctx context.Context, fanfitUserID int32) (GetClientByIDRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 }
 

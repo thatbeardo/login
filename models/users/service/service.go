@@ -10,7 +10,7 @@ import (
 // Service receives commands from handlers and forwards them to the repository
 type Service interface {
 	GetByEmail(context.Context, string) (repository.User, error)
-	Create(context.Context, repository.User) (repository.User, error)
+	Create(context.Context, repository.User) (repository.GetClientByIDRow, error)
 	Delete(context.Context, string) error
 }
 
@@ -27,7 +27,7 @@ func (service *service) GetByEmail(ctx context.Context, id string) (repository.U
 	return service.repository.GetByEmail(ctx, id)
 }
 
-func (service *service) Create(ctx context.Context, input repository.User) (repository.User, error) {
+func (service *service) Create(ctx context.Context, input repository.User) (repository.GetClientByIDRow, error) {
 	fmt.Print("Going into repo")
 	return service.repository.Create(ctx, input)
 }

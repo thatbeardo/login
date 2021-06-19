@@ -17,3 +17,9 @@ CREATE TABLE users (
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 
+CREATE TABLE clients (
+    fanfit_user_id      INT     NOT NULL,
+    temp_field          TEXT       NULL,
+    PRIMARY KEY (fanfit_user_id),
+    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
+);
