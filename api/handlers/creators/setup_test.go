@@ -7,15 +7,15 @@ import (
 )
 
 type mockService struct {
-	GetCreatorResponse    repository.GetCreatorRow
-	CreateCreatorResponse repository.Creator
+	GetCreatorByEmailResponse repository.GetCreatorByEmailRow
+	CreateCreatorResponse     repository.Creator
 
 	GetClientError  error
 	CreateClientErr error
 }
 
-func (m mockService) GetCreator(ctx context.Context, id string) (repository.GetCreatorRow, error) {
-	return m.GetCreatorResponse, m.GetClientError
+func (m mockService) GetCreatorByEmail(ctx context.Context, id string) (repository.GetCreatorByEmailRow, error) {
+	return m.GetCreatorByEmailResponse, m.GetClientError
 }
 
 func (m mockService) CreateCreator(ctx context.Context, user repository.Creator) (repository.Creator, error) {

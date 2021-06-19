@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const createClients = `-- name: CreateClients :one
+const createClient = `-- name: CreateClient :one
 INSERT INTO clients(
   fanfit_user_id,
   temp_field
@@ -20,13 +20,13 @@ INSERT INTO clients(
 RETURNING fanfit_user_id, temp_field
 `
 
-type CreateClientsParams struct {
+type CreateClientParams struct {
 	FanfitUserID int32
 	TempField    sql.NullString
 }
 
-func (q *Queries) CreateClients(ctx context.Context, arg CreateClientsParams) (Client, error) {
-	row := q.db.QueryRowContext(ctx, createClients, arg.FanfitUserID, arg.TempField)
+func (q *Queries) CreateClient(ctx context.Context, arg CreateClientParams) (Client, error) {
+	row := q.db.QueryRowContext(ctx, createClient, arg.FanfitUserID, arg.TempField)
 	var i Client
 	err := row.Scan(&i.FanfitUserID, &i.TempField)
 	return i, err
@@ -57,13 +57,13 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	return i, err
 }
 
-const getClients = `-- name: GetClients :one
+const getClientByEmail = `-- name: GetClientByEmail :one
 SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
 ON users.fanfit_user_id = clients.fanfit_user_id
 WHERE email = $1
 `
 
-type GetClientsRow struct {
+type GetClientByEmailRow struct {
 	ID             int32
 	UserTypeID     int32
 	FirstName      string
@@ -79,9 +79,9 @@ type GetClientsRow struct {
 	TempField      sql.NullString
 }
 
-func (q *Queries) GetClients(ctx context.Context, email string) (GetClientsRow, error) {
-	row := q.db.QueryRowContext(ctx, getClients, email)
-	var i GetClientsRow
+func (q *Queries) GetClientByEmail(ctx context.Context, email string) (GetClientByEmailRow, error) {
+	row := q.db.QueryRowContext(ctx, getClientByEmail, email)
+	var i GetClientByEmailRow
 	err := row.Scan(
 		&i.ID,
 		&i.UserTypeID,

@@ -8,17 +8,17 @@ import (
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
 	Delete(context.Context, string) error
-	CreateClients(context.Context, Client) (Client, error)
-	GetClients(context.Context, string) (GetClientsRow, error)
+	CreateClient(context.Context, Client) (Client, error)
+	GetClientByEmail(context.Context, string) (GetClientByEmailRow, error)
 }
 
 type repository struct {
 	queries *Queries
 }
 
-// GetClients
-func (repo *repository) GetClients(ctx context.Context, FanfitUserID string) (GetClientsRow, error) {
-	response, err := repo.queries.GetClients(ctx, FanfitUserID)
+// GetClientByEmail
+func (repo *repository) GetClientByEmail(ctx context.Context, FanfitUserID string) (GetClientByEmailRow, error) {
+	response, err := repo.queries.GetClientByEmail(ctx, FanfitUserID)
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -37,8 +37,8 @@ func NewUserStore(db DBTX) Repository {
 }
 
 // Create Users
-func (repo *repository) CreateClients(ctx context.Context, cons Client) (Client, error) {
-	response, err := repo.queries.CreateClients(ctx, CreateClientsParams{
+func (repo *repository) CreateClient(ctx context.Context, cons Client) (Client, error) {
+	response, err := repo.queries.CreateClient(ctx, CreateClientParams{
 		FanfitUserID: cons.FanfitUserID,
 		TempField:    cons.TempField,
 	})

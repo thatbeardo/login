@@ -9,7 +9,7 @@ import (
 
 // Service receives commands from handlers and forwards them to the repository
 type Service interface {
-	GetCreator(context.Context, string) (repository.GetCreatorRow, error)
+	GetCreatorByEmail(context.Context, string) (repository.GetCreatorByEmailRow, error)
 	CreateCreator(context.Context, repository.Creator) (repository.Creator, error)
 }
 
@@ -22,8 +22,8 @@ func New(repository repository.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (service *service) GetCreator(ctx context.Context, input string) (repository.GetCreatorRow, error) {
-	return service.repository.GetCreator(ctx, input)
+func (service *service) GetCreatorByEmail(ctx context.Context, input string) (repository.GetCreatorByEmailRow, error) {
+	return service.repository.GetCreatorByEmail(ctx, input)
 }
 
 func (service *service) CreateCreator(ctx context.Context, input repository.Creator) (repository.Creator, error) {

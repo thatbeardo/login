@@ -15,7 +15,7 @@ RETURNING *;
 
 
 
--- name: GetCreator :one
+-- name: GetCreatorByEmail :one
 SELECT * FROM users INNER JOIN creators
 ON users.fanfit_user_id = creators.fanfit_user_id
 WHERE email = $1;

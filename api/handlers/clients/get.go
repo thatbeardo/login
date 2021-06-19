@@ -22,7 +22,7 @@ import (
 func getByID(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fanfitID := c.Param("email_id")
-		resource, err := service.GetClients(c.Request.Context(), fanfitID)
+		resource, err := service.GetClientByEmail(c.Request.Context(), fanfitID)
 		if err != nil {
 			views.Wrap(err, c)
 			return

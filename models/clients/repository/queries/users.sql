@@ -1,5 +1,5 @@
 
--- name: CreateClients :one
+-- name: CreateClient :one
 INSERT INTO clients(
   fanfit_user_id,
   temp_field
@@ -10,14 +10,13 @@ INSERT INTO clients(
 RETURNING *;
 
 
-
 -- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
 RETURNING *;
 
 
--- name: GetClients :one
+-- name: GetClientByEmail :one
 SELECT * FROM users INNER JOIN clients
 ON users.fanfit_user_id = clients.fanfit_user_id
 WHERE email = $1;

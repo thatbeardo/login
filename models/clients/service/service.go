@@ -9,8 +9,8 @@ import (
 
 // Service receives commands from handlers and forwards them to the repository
 type Service interface {
-	GetClients(context.Context, string) (repository.GetClientsRow, error)
-	CreateClients(context.Context, repository.Client) (repository.Client, error)
+	GetClientByEmail(context.Context, string) (repository.GetClientByEmailRow, error)
+	CreateClient(context.Context, repository.Client) (repository.Client, error)
 }
 
 type service struct {
@@ -22,11 +22,11 @@ func New(repository repository.Repository) Service {
 	return &service{repository: repository}
 }
 
-func (service *service) GetClients(ctx context.Context, input string) (repository.GetClientsRow, error) {
-	return service.repository.GetClients(ctx, input)
+func (service *service) GetClientByEmail(ctx context.Context, input string) (repository.GetClientByEmailRow, error) {
+	return service.repository.GetClientByEmail(ctx, input)
 }
 
-func (service *service) CreateClients(ctx context.Context, input repository.Client) (repository.Client, error) {
+func (service *service) CreateClient(ctx context.Context, input repository.Client) (repository.Client, error) {
 	fmt.Print("Going into repo")
-	return service.repository.CreateClients(ctx, input)
+	return service.repository.CreateClient(ctx, input)
 }

@@ -8,7 +8,7 @@ import (
 
 type Querier interface {
 	CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error)
-	GetCreator(ctx context.Context, email string) (GetCreatorRow, error)
+	GetCreatorByEmail(ctx context.Context, email string) (GetCreatorByEmailRow, error)
 }
 
 var _ Querier = (*Queries)(nil)

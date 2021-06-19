@@ -22,7 +22,7 @@ import (
 func getByID(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		emailID := c.Param("email_id")
-		resource, err := service.GetCreator(c.Request.Context(), emailID)
+		resource, err := service.GetCreatorByEmail(c.Request.Context(), emailID)
 		if err != nil {
 			views.Wrap(err, c)
 			return

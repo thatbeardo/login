@@ -28,7 +28,7 @@ func post(service service.Service) gin.HandlerFunc {
 			return
 		}
 		fmt.Println("About to create")
-		response, err := service.CreateClients(c.Request.Context(), input)
+		response, err := service.CreateClient(c.Request.Context(), input)
 		if err != nil {
 			views.Wrap(err, c)
 			return
