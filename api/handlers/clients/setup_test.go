@@ -18,6 +18,6 @@ func (m mockService) GetClientByEmail(ctx context.Context, id string) (repositor
 	return m.GetClientResponse, m.GetClientError
 }
 
-func (m mockService) CreateClient(ctx context.Context, user int32) (repository.GetClientByIDRow, error) {
+func (m mockService) CreateClient(ctx context.Context, client repository.Client) (repository.GetClientByIDRow, error) {
 	return m.CreateClientResponse, m.CreateClientErr
 }
