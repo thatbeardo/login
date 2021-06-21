@@ -1,8 +1,8 @@
 version: '3.6'
 services: 
-    login:
+    api:
         build: .
-        container_name: login
+        container_name: api
         depends_on:
             - postgres
         ports:

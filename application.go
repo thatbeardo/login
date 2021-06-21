@@ -19,28 +19,14 @@ import (
 	"os"
 	"time"
 
-	// API Routes
-	clientHandlers "github.com/fanfit/login/api/handlers/clients"
-	creatorHandlers "github.com/fanfit/login/api/handlers/creators"
-	userHandlers "github.com/fanfit/login/api/handlers/users"
-
-	// Tags
-	// Users Tag
-	userRepository "github.com/fanfit/login/models/users/repository"
-	userServicePackage "github.com/fanfit/login/models/users/service"
-
-	// Creators Tag
-	creatorRepository "github.com/fanfit/login/models/creators/repository"
-	creatorServicePackage "github.com/fanfit/login/models/creators/service"
-
-	// Clients Tag
-	clientRepository "github.com/fanfit/login/models/clients/repository"
-	clientServicePackage "github.com/fanfit/login/models/clients/service"
-
-	"github.com/fanfit/login/api/middleware"
-	"github.com/fanfit/login/server"
-	"github.com/gin-gonic/gin"
+	"github.com/fanfit/userservice/api/handlers/users"
+	"github.com/fanfit/userservice/api/middleware"
+	"github.com/fanfit/userservice/models/users/repository"
+	"github.com/fanfit/userservice/models/users/service"
 	"github.com/sirupsen/logrus"
+
+	"github.com/fanfit/userservice/server"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -55,25 +41,14 @@ func main() {
 		fmt.Print("Something went wrong!" + err.Error())
 	}
 
-	// Instantiate service for each tag
-	userStore := userRepository.NewUserStore(db)
-	userService := userServicePackage.New(userStore)
+	userRepository := repository.NewUserStore(db)
+	userService := service.New(userRepository)
 
-	creatorStore := creatorRepository.NewUserStore(db)
-	creatorService := creatorServicePackage.New(creatorStore)
-
-	clientStore := clientRepository.NewUserStore(db)
-	clientService := clientServicePackage.New(clientStore)
-
-	// Initialize the middleware and routes
 	engine := gin.Default()
 	router := server.GenerateRouter(engine)
 
-	// Set routes for each tag
 	router.Use(middleware.VerifyToken)
-	userHandlers.Routes(router, userService)
-	clientHandlers.Routes(router, clientService)
-	creatorHandlers.Routes(router, creatorService)
+	users.Routes(router, userService)
 
 	server.Orchestrate(engine, db)
 }

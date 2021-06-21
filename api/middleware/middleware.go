@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/fanfit/login/api/middleware/injection"
-	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/userservice/api/middleware/injection"
+	"github.com/fanfit/userservice/api/views"
 	"github.com/gin-gonic/gin"
 )
 
