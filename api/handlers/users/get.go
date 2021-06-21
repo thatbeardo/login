@@ -31,3 +31,27 @@ func getByID(service service.Service) gin.HandlerFunc {
 		c.JSON(http.StatusOK, resource)
 	}
 }
+
+func getCreatorByID(service service.Service) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		emailID := c.Param("email_id")
+		resource, err := service.GetCreator(c.Request.Context(), emailID)
+		if err != nil {
+			views.Wrap(err, c)
+			return
+		}
+		c.JSON(http.StatusOK, resource)
+	}
+}
+
+func getClientByID(service service.Service) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		emailID := c.Param("email_id")
+		resource, err := service.GetClient(c.Request.Context(), emailID)
+		if err != nil {
+			views.Wrap(err, c)
+			return
+		}
+		c.JSON(http.StatusOK, resource)
+	}
+}

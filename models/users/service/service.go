@@ -28,6 +28,7 @@ func (service *service) GetByEmail(ctx context.Context, id string) (repository.U
 }
 
 func (service *service) Create(ctx context.Context, input repository.User) (repository.GetClientByIDRow, error) {
+
 	fmt.Print("Going into repo")
 	return service.repository.Create(ctx, input)
 }

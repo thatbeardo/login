@@ -32,6 +32,7 @@ CREATE TABLE clients (
 );
 
 
+
 INSERT INTO user_types(id, description) VALUES(0, 'Creator');
 INSERT INTO user_types(id, description) VALUES(1, 'Clients');
 
@@ -70,6 +71,7 @@ BEGIN
     VALUES(last_id, 'rwbrtb', 'test_image', 'test_image');
 END $$;
 -- Inserts a new client
+
 DO $$
 DECLARE
     last_id INTEGER;
@@ -80,6 +82,7 @@ BEGIN
     INSERT INTO clients(fanfit_user_id)
     VALUES(last_id);
 END $$;
+
 DO $$
 DECLARE
     last_id INTEGER;
@@ -109,5 +112,6 @@ END $$;
 --  RETURNING users.id INTO new_id;
 --  INSERT INTO clients(fanfit_user_id)
 --  VALUES(new_id);
+
 -- END;
 -- $$

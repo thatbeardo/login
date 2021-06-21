@@ -130,6 +130,7 @@ WHERE fanfit_user_id = $1
 `
 
 type GetClientByIDRow struct {
+
 	ID             int32
 	UserTypeID     int32
 	FirstName      string
@@ -148,6 +149,7 @@ type GetClientByIDRow struct {
 func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetClientByIDRow, error) {
 	row := q.db.QueryRowContext(ctx, getClientByID, fanfitUserID)
 	var i GetClientByIDRow
+
 	err := row.Scan(
 		&i.ID,
 		&i.UserTypeID,

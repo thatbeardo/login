@@ -9,15 +9,13 @@ import (
 
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
-	// CREATES
-
 	// DELETES
 	Delete(context.Context, string) error
 
 	// GETS
 	GetByEmail(context.Context, string) (User, error)
-
 	Create(ctx context.Context, user User) (GetClientByIDRow, error)
+
 }
 
 type repository struct {
