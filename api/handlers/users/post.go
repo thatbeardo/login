@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/fanfit/userservice/api/views"
-	"github.com/fanfit/userservice/models/users/repository"
-	"github.com/fanfit/userservice/models/users/service"
+	"github.com/fanfit/login/api/views"
+	"github.com/fanfit/login/models/users/repository"
+	"github.com/fanfit/login/models/users/service"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,24 +30,12 @@ func post(service service.Service) gin.HandlerFunc {
 		}
 
 		fmt.Println("About to create")
-		response, err2 := service.Create(c.Request.Context(), input)
-		if err2 != nil {
-			views.Wrap(err2, c)
+    
+		newUser, err := service.Create(c.Request.Context(), input)
+		if err != nil {
+			views.Wrap(err, c)
 			return
 		}
-
-		_, err3 := service.CreateConsumer(c.Request.Context(), response.ID)
-		if err3 != nil {
-			views.Wrap(err3, c)
-			return
-		}
-
-		fullConsumer, err4 := service.GetClient(c.Request.Context(), response.Email)
-		if err4 != nil {
-			views.Wrap(err4, c)
-			return
-		}
-
-		c.JSON(http.StatusAccepted, fullConsumer)
+		c.JSON(http.StatusAccepted, newUser)
 	}
 }

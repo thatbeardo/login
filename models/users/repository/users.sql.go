@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-const createConsumer = `-- name: CreateConsumer :one
-INSERT INTO consumers(
+const createClient = `-- name: CreateClient :one
+INSERT INTO clients(
   fanfit_user_id,
   temp_field
 ) VALUES(
@@ -20,54 +20,15 @@ INSERT INTO consumers(
 RETURNING fanfit_user_id, temp_field
 `
 
-type CreateConsumerParams struct {
+type CreateClientParams struct {
 	FanfitUserID int32
 	TempField    sql.NullString
 }
 
-func (q *Queries) CreateConsumer(ctx context.Context, arg CreateConsumerParams) (Consumer, error) {
-	row := q.db.QueryRowContext(ctx, createConsumer, arg.FanfitUserID, arg.TempField)
-	var i Consumer
+func (q *Queries) CreateClient(ctx context.Context, arg CreateClientParams) (Client, error) {
+	row := q.db.QueryRowContext(ctx, createClient, arg.FanfitUserID, arg.TempField)
+	var i Client
 	err := row.Scan(&i.FanfitUserID, &i.TempField)
-	return i, err
-}
-
-const createCreator = `-- name: CreateCreator :one
-INSERT INTO creators(
-  fanfit_user_id,
-  payment_info,
-  logo_picture,
-  background_picture
-) VALUES(
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING fanfit_user_id, payment_info, logo_picture, background_picture
-`
-
-type CreateCreatorParams struct {
-	FanfitUserID      int32
-	PaymentInfo       string
-	LogoPicture       string
-	BackgroundPicture string
-}
-
-func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error) {
-	row := q.db.QueryRowContext(ctx, createCreator,
-		arg.FanfitUserID,
-		arg.PaymentInfo,
-		arg.LogoPicture,
-		arg.BackgroundPicture,
-	)
-	var i Creator
-	err := row.Scan(
-		&i.FanfitUserID,
-		&i.PaymentInfo,
-		&i.LogoPicture,
-		&i.BackgroundPicture,
-	)
 	return i, err
 }
 
@@ -91,7 +52,7 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9 
 )
 RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
 `
@@ -162,13 +123,14 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	return i, err
 }
 
-const getClient = `-- name: GetClient :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users
-INNER JOIN consumers on consumers.fanfit_user_id = users.id
-WHERE users.email = $1
+const getClientByID = `-- name: GetClientByID :one
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
+ON users.id = clients.fanfit_user_id
+WHERE fanfit_user_id = $1
 `
 
-type GetClientRow struct {
+type GetClientByIDRow struct {
+
 	ID             int32
 	UserTypeID     int32
 	FirstName      string
@@ -184,9 +146,10 @@ type GetClientRow struct {
 	TempField      sql.NullString
 }
 
-func (q *Queries) GetClient(ctx context.Context, email string) (GetClientRow, error) {
-	row := q.db.QueryRowContext(ctx, getClient, email)
-	var i GetClientRow
+func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetClientByIDRow, error) {
+	row := q.db.QueryRowContext(ctx, getClientByID, fanfitUserID)
+	var i GetClientByIDRow
+
 	err := row.Scan(
 		&i.ID,
 		&i.UserTypeID,
@@ -201,53 +164,6 @@ func (q *Queries) GetClient(ctx context.Context, email string) (GetClientRow, er
 		&i.Bio,
 		&i.FanfitUserID,
 		&i.TempField,
-	)
-	return i, err
-}
-
-const getCreator = `-- name: GetCreator :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, payment_info, logo_picture, background_picture FROM users
-INNER JOIN creators on creators.fanfit_user_id = users.id
-WHERE users.email = $1
-`
-
-type GetCreatorRow struct {
-	ID                int32
-	UserTypeID        int32
-	FirstName         string
-	LastName          string
-	Email             string
-	CreatedDate       time.Time
-	Username          sql.NullString
-	PhoneNo           sql.NullString
-	Gender            sql.NullString
-	ProfilePicture    sql.NullString
-	Bio               sql.NullString
-	FanfitUserID      int32
-	PaymentInfo       string
-	LogoPicture       string
-	BackgroundPicture string
-}
-
-func (q *Queries) GetCreator(ctx context.Context, email string) (GetCreatorRow, error) {
-	row := q.db.QueryRowContext(ctx, getCreator, email)
-	var i GetCreatorRow
-	err := row.Scan(
-		&i.ID,
-		&i.UserTypeID,
-		&i.FirstName,
-		&i.LastName,
-		&i.Email,
-		&i.CreatedDate,
-		&i.Username,
-		&i.PhoneNo,
-		&i.Gender,
-		&i.ProfilePicture,
-		&i.Bio,
-		&i.FanfitUserID,
-		&i.PaymentInfo,
-		&i.LogoPicture,
-		&i.BackgroundPicture,
 	)
 	return i, err
 }

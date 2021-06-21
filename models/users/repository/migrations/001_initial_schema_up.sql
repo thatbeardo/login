@@ -1,6 +1,6 @@
 CREATE TABLE user_types (
-    id              INT PRIMARY KEY,
-    description     TEXT NOT NULL
+    id      INT PRIMARY KEY,
+    description    TEXT NOT NULL
 );
 CREATE TABLE users (
     id              SERIAL     PRIMARY KEY,
@@ -16,15 +16,8 @@ CREATE TABLE users (
     bio             VARCHAR(1000) NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
-CREATE TABLE creators (
-    fanfit_user_id      INT     NOT NULL,
-    payment_info        TEXT    NOT NULL,
-    logo_picture        TEXT    NOT NULL,
-    background_picture  TEXT    NOT NULL,
-    PRIMARY KEY (fanfit_user_id),
-    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
-);
-CREATE TABLE consumers (
+
+CREATE TABLE clients (
     fanfit_user_id      INT     NOT NULL,
     temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),

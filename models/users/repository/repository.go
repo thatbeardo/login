@@ -4,46 +4,23 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 // Repository is used by the service to communicate with the underlying database
 type Repository interface {
-	// CREATES
-	Create(context.Context, User) (User, error)
-	CreateConsumer(context.Context, int32) (Consumer, error)
-
 	// DELETES
 	Delete(context.Context, string) error
 
 	// GETS
 	GetByEmail(context.Context, string) (User, error)
-	GetCreator(context.Context, string) (GetCreatorRow, error)
-	GetClient(context.Context, string) (GetClientRow, error)
+	Create(ctx context.Context, user User) (GetClientByIDRow, error)
+
 }
 
 type repository struct {
 	queries *Queries
-}
-
-// GetCreator with fan_fit_userid
-func (repo *repository) GetCreator(ctx context.Context, emailID string) (GetCreatorRow, error) {
-	response, err := repo.queries.GetCreator(ctx, emailID)
-
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	return response, err
-
-}
-
-// GetConsumer
-func (repo *repository) GetClient(ctx context.Context, emailID string) (GetClientRow, error) {
-	response, err := repo.queries.GetClient(ctx, emailID)
-	if err != nil {
-		fmt.Print(err)
-	}
-	return response, err
+	db      *sql.DB
 }
 
 // GetByID function adds a resource node
@@ -57,8 +34,13 @@ func (repo *repository) GetByEmail(ctx context.Context, email string) (User, err
 }
 
 // Create function adds a node to the graph - typically invoked by customer API not guard-my-app
-func (repo *repository) Create(ctx context.Context, user User) (User, error) {
-	response, err := repo.queries.CreateUser(ctx, CreateUserParams{
+func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow, error) {
+	transaction, err := repo.db.BeginTx(ctx, &sql.TxOptions{})
+	if err != nil {
+		fmt.Print("somethinbg went wrong")
+	}
+
+	response, err := repo.queries.WithTx(transaction).CreateUser(ctx, CreateUserParams{
 		FirstName:      user.FirstName,
 		LastName:       user.LastName,
 		Email:          user.Email,
@@ -69,11 +51,31 @@ func (repo *repository) Create(ctx context.Context, user User) (User, error) {
 		ProfilePicture: user.ProfilePicture,
 		Bio:            user.Bio,
 	})
-
 	if err != nil {
+		transaction.Rollback()
 		fmt.Print(err)
 	}
-	return response, err
+	_, err = repo.queries.WithTx(transaction).CreateClient(ctx, CreateClientParams{
+		FanfitUserID: response.ID,
+		TempField:    sql.NullString{},
+	})
+	if err != nil {
+		transaction.Rollback()
+		fmt.Print(err)
+	}
+
+	fullClientobj, err := repo.queries.WithTx(transaction).GetClientByID(ctx, response.ID)
+	if err != nil {
+		transaction.Rollback()
+		fmt.Print(err)
+	}
+
+	// Commit the change if all queries ran successfully
+	err = transaction.Commit()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fullClientobj, err
 }
 
 // Delete function deletes a node from the graph
@@ -81,25 +83,9 @@ func (repo *repository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func NewUserStore(db DBTX) Repository {
+func NewUserStore(db *sql.DB) Repository {
 	return &repository{
 		queries: New(db),
+		db:      db,
 	}
-}
-
-// Create Users
-func (repo *repository) CreateConsumer(ctx context.Context, userID int32) (Consumer, error) {
-	var temp sql.NullString
-	temp.String = "blank"
-	temp.Valid = true
-
-	response, err := repo.queries.CreateConsumer(ctx, CreateConsumerParams{
-		FanfitUserID: userID,
-		TempField:    temp,
-	})
-
-	if err != nil {
-		fmt.Print(err)
-	}
-	return response, err
 }

@@ -2,17 +2,6 @@
 SELECT * FROM users 
 WHERE email = $1;
 
--- name: GetClient :one
-SELECT * FROM users
-INNER JOIN consumers on consumers.fanfit_user_id = users.id
-WHERE users.email = $1;
-
-
--- name: GetCreator :one
-SELECT * FROM users
-INNER JOIN creators on creators.fanfit_user_id = users.id
-WHERE users.email = $1;
-
 
 -- name: CreateUser :one
 INSERT INTO users ( 
@@ -34,12 +23,12 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9
+  $9 
 )
 RETURNING *;
 
--- name: CreateConsumer :one
-INSERT INTO consumers(
+-- name: CreateClient :one
+INSERT INTO clients(
   fanfit_user_id,
   temp_field
 ) VALUES(
@@ -48,22 +37,13 @@ INSERT INTO consumers(
 )
 RETURNING *;
 
--- name: CreateCreator :one
-INSERT INTO creators(
-  fanfit_user_id,
-  payment_info,
-  logo_picture,
-  background_picture
-) VALUES(
-  $1,
-  $2,
-  $3,
-  $4
-)
-RETURNING *;
-
 
 -- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
 RETURNING *;
+
+-- name: GetClientByID :one
+SELECT * FROM users INNER JOIN clients
+ON users.id = clients.fanfit_user_id
+WHERE fanfit_user_id = $1;

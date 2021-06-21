@@ -1,4 +1,4 @@
-module github.com/fanfit/userservice
+module github.com/fanfit/login
 
 go 1.14
 

@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 
-	"github.com/fanfit/userservice/api/views"
+	"github.com/fanfit/login/api/views"
 	"github.com/gin-gonic/gin"
 )
 
