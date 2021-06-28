@@ -47,10 +47,10 @@ DECLARE
 BEGIN
     INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
     VALUES(0, 'Scott', 'Mathison', 'scott@gmail.com', 'scottMath', '791-985-1998',
-           'Male', 'public/scottMath/scott_mathison_profile_picture.png', 'Love working with bodyweight to build strenght and power!')
+           'Male', 'scottMath/scott_mathison_profile_picture.png', 'Love working with bodyweight to build strenght and power!')
     RETURNING users.id INTO last_id;
     INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture)
-    VALUES(last_id, 'rwbrtb', 'test_image', 'public/scottMath/scott_mathison_background_image.png');
+    VALUES(last_id, 'rwbrtb', 'test_image', 'scottMath/scott_mathison_background_image.png');
 END $$;
 DO $$
 DECLARE
