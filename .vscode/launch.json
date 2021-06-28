@@ -13,7 +13,11 @@
       "env": {
         "HOST": "localhost",
         "PORT": "8080",
-        "DB_URL": "postgres://root:root@localhost:5432/root"
+        "DB_HOST": "",
+        "DB_NAME": "",
+        "DB_PASSWORD": "",
+        "DB_PORT": 5432,
+        "DB_USERNAME": ""      
       },
       "args": []
     }

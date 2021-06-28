@@ -35,27 +35,13 @@ func GenerateRouter(r *gin.Engine) *gin.RouterGroup {
 
 func CreatePostGresConnection(logger *logrus.Logger, dbURL string) (*sql.DB, error) {
 
-	// conn, err := pgx.Connect(context.Background(), dbURL)
-	// if err != nil {
-	// 	fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-	// 	os.Exit(1)
-	// }
+	db, err := sql.Open("pgx", dbURL)
 
-	// u, err := url.Parse(dbURL)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// c, err := pgx.ParseConfig(u.String())
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	db, err := sql.Open("pgx", os.Getenv("DB_URL"))
 	if err != nil {
 		return nil, err
 	}
-	return db, nil
+	err = db.Ping()
+	return db, err
 }
 
 func setupSwagger(r *gin.Engine) {

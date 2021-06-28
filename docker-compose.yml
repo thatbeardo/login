@@ -8,9 +8,13 @@ services:
         ports:
             - 8080:8080
         environment: 
-            DB_URL: postgres://root:root@postgres:5432/root?sslmode=disable
             HOST: localhost
             PORT: 8080
+            DB_USERNAME: root
+            DB_PASSWORD: root
+            DB_HOST: postgres
+            DB_PORT: 5432
+            DB_NAME: root
 
     postgres:
         image: postgres
