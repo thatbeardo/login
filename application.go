@@ -49,8 +49,8 @@ func main() {
 		TimestampFormat: time.StampMilli,
 		FullTimestamp:   true,
 	}
-
-	db, err := server.CreatePostGresConnection(log, os.Getenv("DB_URL"))
+	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+	db, err := server.CreatePostGresConnection(log, dbURL)
 	if err != nil {
 		fmt.Print("Something went wrong!" + err.Error())
 	}
