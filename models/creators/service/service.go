@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/fanfit/login/models/creators/repository"
+	"github.com/fanfit/user-service/models/creators/repository"
 )
 
 // Service receives commands from handlers and forwards them to the repository

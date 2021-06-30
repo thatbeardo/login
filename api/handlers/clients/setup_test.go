@@ -3,7 +3,7 @@ package clients_test
 import (
 	"context"
 
-	"github.com/fanfit/login/models/clients/repository"
+	"github.com/fanfit/user-service/models/clients/repository"
 )
 
 type mockService struct {

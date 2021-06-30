@@ -191,7 +191,7 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "/",
 	Schemes:     []string{},
-	Title:       "Fan fit login",
+	Title:       "Fan fit user-service",
 	Description: "## Users\n---",
 }
 

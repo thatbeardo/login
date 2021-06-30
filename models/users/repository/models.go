@@ -13,17 +13,18 @@ type Client struct {
 }
 
 type User struct {
-	ID             int32
-	UserTypeID     int32
-	FirstName      string
-	LastName       string
-	Email          string
-	CreatedDate    time.Time
-	Username       sql.NullString
-	PhoneNo        sql.NullString
-	Gender         sql.NullString
-	ProfilePicture sql.NullString
-	Bio            sql.NullString
+	ID                int32
+	UserTypeID        int32
+	FirstName         string
+	LastName          string
+	Email             string
+	CreatedDate       time.Time
+	Username          sql.NullString
+	PhoneNo           sql.NullString
+	Gender            sql.NullString
+	ProfilePicture    sql.NullString
+	Bio               sql.NullString
+	BackgroundPicture sql.NullString
 }
 
 type UserType struct {

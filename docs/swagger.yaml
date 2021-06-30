@@ -35,7 +35,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Fan fit login
+  title: Fan fit user-service
   version: 0.1.0
 paths:
   /v1/users/:

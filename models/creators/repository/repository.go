@@ -30,10 +30,9 @@ func (repo *repository) GetCreatorByEmail(ctx context.Context, FanfitUserID stri
 // Create Users
 func (repo *repository) CreateCreator(ctx context.Context, cons Creator) (Creator, error) {
 	response, err := repo.queries.CreateCreator(ctx, CreateCreatorParams{
-		FanfitUserID:      cons.FanfitUserID,
-		PaymentInfo:       cons.PaymentInfo,
-		LogoPicture:       cons.LogoPicture,
-		BackgroundPicture: cons.BackgroundPicture,
+		FanfitUserID: cons.FanfitUserID,
+		PaymentInfo:  cons.PaymentInfo,
+		LogoPicture:  cons.LogoPicture,
 	})
 
 	if err != nil {

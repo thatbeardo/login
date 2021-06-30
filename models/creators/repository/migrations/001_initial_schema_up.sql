@@ -13,7 +13,8 @@ CREATE TABLE users (
     phone_no        TEXT    NULL UNIQUE,
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
-       bio             VARCHAR(1000) NULL,
+    bio             VARCHAR(1000) NULL,
+    background_picture  TEXT    NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 
@@ -21,7 +22,6 @@ CREATE TABLE creators (
     fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
-    background_picture  TEXT    NOT NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );

@@ -14,6 +14,7 @@ CREATE TABLE users (
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
+    background_picture TEXT         NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 

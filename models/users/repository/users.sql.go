@@ -42,7 +42,8 @@ INSERT INTO users (
   phone_no,
   gender,
   profile_picture,
-  bio
+  bio,
+  background_picture
 ) VALUES (
   $1, 
   $2, 
@@ -52,21 +53,23 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9 
+  $9,
+  $10
 )
-RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
+RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture
 `
 
 type CreateUserParams struct {
-	FirstName      string
-	LastName       string
-	Email          string
-	UserTypeID     int32
-	Username       sql.NullString
-	PhoneNo        sql.NullString
-	Gender         sql.NullString
-	ProfilePicture sql.NullString
-	Bio            sql.NullString
+	FirstName         string
+	LastName          string
+	Email             string
+	UserTypeID        int32
+	Username          sql.NullString
+	PhoneNo           sql.NullString
+	Gender            sql.NullString
+	ProfilePicture    sql.NullString
+	Bio               sql.NullString
+	BackgroundPicture sql.NullString
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -80,6 +83,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.Gender,
 		arg.ProfilePicture,
 		arg.Bio,
+		arg.BackgroundPicture,
 	)
 	var i User
 	err := row.Scan(
@@ -94,6 +98,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Gender,
 		&i.ProfilePicture,
 		&i.Bio,
+		&i.BackgroundPicture,
 	)
 	return i, err
 }
@@ -101,7 +106,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
-RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio
+RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
@@ -119,30 +124,32 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 		&i.Gender,
 		&i.ProfilePicture,
 		&i.Bio,
+		&i.BackgroundPicture,
 	)
 	return i, err
 }
 
 const getClientByID = `-- name: GetClientByID :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, fanfit_user_id, temp_field FROM users INNER JOIN clients
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, temp_field FROM users INNER JOIN clients
 ON users.id = clients.fanfit_user_id
 WHERE fanfit_user_id = $1
 `
 
 type GetClientByIDRow struct {
-	ID             int32
-	UserTypeID     int32
-	FirstName      string
-	LastName       string
-	Email          string
-	CreatedDate    time.Time
-	Username       sql.NullString
-	PhoneNo        sql.NullString
-	Gender         sql.NullString
-	ProfilePicture sql.NullString
-	Bio            sql.NullString
-	FanfitUserID   int32
-	TempField      sql.NullString
+	ID                int32
+	UserTypeID        int32
+	FirstName         string
+	LastName          string
+	Email             string
+	CreatedDate       time.Time
+	Username          sql.NullString
+	PhoneNo           sql.NullString
+	Gender            sql.NullString
+	ProfilePicture    sql.NullString
+	Bio               sql.NullString
+	BackgroundPicture sql.NullString
+	FanfitUserID      int32
+	TempField         sql.NullString
 }
 
 func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetClientByIDRow, error) {
@@ -160,6 +167,7 @@ func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetCli
 		&i.Gender,
 		&i.ProfilePicture,
 		&i.Bio,
+		&i.BackgroundPicture,
 		&i.FanfitUserID,
 		&i.TempField,
 	)
@@ -167,7 +175,7 @@ func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetCli
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio FROM users 
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture FROM users 
 WHERE email = $1
 `
 
@@ -186,6 +194,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Gender,
 		&i.ProfilePicture,
 		&i.Bio,
+		&i.BackgroundPicture,
 	)
 	return i, err
 }
