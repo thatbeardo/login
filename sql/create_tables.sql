@@ -19,13 +19,13 @@ CREATE TABLE users (
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
+    background_picture  TEXT    NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 CREATE TABLE creators (
     fanfit_user_id      INT     NOT NULL,
     payment_info        TEXT    NOT NULL,
     logo_picture        TEXT    NOT NULL,
-    background_picture  TEXT    NOT NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
@@ -45,35 +45,36 @@ DO $$
 DECLARE
     last_id INTEGER;
 BEGIN
-    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio, background_picture)
     VALUES(0, 'Scott', 'Mathison', 'scott@gmail.com', 'scottMath', '791-985-1998',
-           'Male', 'scottMath/scott_mathison_profile_picture.png', 'Love working with bodyweight to build strenght and power!')
+           'Male', 'scottMath/scott_mathison_profile_picture.png', 'Love working with bodyweight to build strenght and power!', 'scottMath/scott_mathison_background_image.png')
     RETURNING users.id INTO last_id;
-    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture)
-    VALUES(last_id, 'rwbrtb', 'test_image', 'scottMath/scott_mathison_background_image.png');
+    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture)
+    VALUES(last_id, 'rwbrtb', 'test_image');
 END $$;
 DO $$
 DECLARE
     last_id INTEGER;
 BEGIN
-    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio, background_picture)
     VALUES(0, 'Stefana', 'Hall', 'stefana@gmail.com', 'definingFitness', '443-890-1952',
-           'Female', 'test_profile_picture', 'Love female body positivity!')
+           'Female', 'test_profile_picture', 'Love female body positivity!', 'test_image')
     RETURNING users.id INTO last_id;
-    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture)
-    VALUES(last_id, 'rwbrtb', 'test_image', 'test_image');
+    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture)
+    VALUES(last_id, 'rwbrtb', 'test_image');
 END $$;
 DO $$
 DECLARE
     last_id INTEGER;
 BEGIN
-    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio)
+    INSERT INTO users(user_type_id, first_name, last_name, email, username, phone_no, gender, profile_picture, bio, background_picture)
     VALUES(0, 'Gabe', 'Dalessandro', 'gdalessa@usc.edu', 'italianstallion', '570-332-5722',
-           'Male', 'test_profile_picture', 'Sports and living a healthy lifestyle!')
+           'Male', 'test_profile_picture', 'Sports and living a healthy lifestyle!', 'test_image')
     RETURNING users.id INTO last_id;
-    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture, background_picture)
-    VALUES(last_id, 'rwbrtb', 'test_image', 'test_image');
+    INSERT INTO creators(fanfit_user_id, payment_info, logo_picture)
+    VALUES(last_id, 'rwbrtb', 'test_image');
 END $$;
+
 -- Inserts a new client
 DO $$
 DECLARE
@@ -95,24 +96,3 @@ BEGIN
     INSERT INTO clients(fanfit_user_id)
     VALUES(last_id);
 END $$;
-
--- Function to create clients: Finish implementing this and then just call it a bunch
--- CREATE OR REPLACE FUNCTION P_CREATE_NEW_CLIENT (
---  p_user_type_id  INTEGER,
---  p_first_name    TEXT,
---  p_last_name     TEXT,
---  p_email         TEXT)
---  RETURNS void
---  LANGUAGE plpgsql
---     AS
--- $$
--- DECLARE
---  new_id          INTEGER;
--- BEGIN
---  INSERT INTO users(user_type_id, first_name, last_name, email)
---  VALUES(p_user_type_id, p_first_name, p_last_name, p_email)
---  RETURNING users.id INTO new_id;
---  INSERT INTO clients(fanfit_user_id)
---  VALUES(new_id);
--- END;
--- $$

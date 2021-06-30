@@ -20,7 +20,7 @@ import (
 // @Success 500 {object} views.ErrView
 // @Security ApiKeyAuth
 // @Router /v1/users/{email_id} [get]
-func getByID(service service.Service) gin.HandlerFunc {
+func getUserByEmail(service service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		emailID := c.Param("email_id")
 		resource, err := service.GetByEmail(c.Request.Context(), emailID)

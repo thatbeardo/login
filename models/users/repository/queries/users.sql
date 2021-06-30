@@ -13,7 +13,8 @@ INSERT INTO users (
   phone_no,
   gender,
   profile_picture,
-  bio
+  bio,
+  background_picture
 ) VALUES (
   $1, 
   $2, 
@@ -23,7 +24,8 @@ INSERT INTO users (
   $6,
   $7, 
   $8, 
-  $9 
+  $9,
+  $10
 )
 RETURNING *;
 
