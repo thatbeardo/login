@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/fanfit/login/models/users/service"
+	"github.com/fanfit/user-service/models/users/service"
 	"github.com/gin-gonic/gin"
 )
 

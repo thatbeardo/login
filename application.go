@@ -1,4 +1,4 @@
-// @title Fan fit login
+// @title Fan fit user-service
 // @version 0.1.0
 
 // @license.name Apache 2.0
@@ -20,25 +20,25 @@ import (
 	"time"
 
 	// API Routes
-	clientHandlers "github.com/fanfit/login/api/handlers/clients"
-	creatorHandlers "github.com/fanfit/login/api/handlers/creators"
-	userHandlers "github.com/fanfit/login/api/handlers/users"
+	clientHandlers "github.com/fanfit/user-service/api/handlers/clients"
+	creatorHandlers "github.com/fanfit/user-service/api/handlers/creators"
+	userHandlers "github.com/fanfit/user-service/api/handlers/users"
 
 	// Tags
 	// Users Tag
-	userRepository "github.com/fanfit/login/models/users/repository"
-	userServicePackage "github.com/fanfit/login/models/users/service"
+	userRepository "github.com/fanfit/user-service/models/users/repository"
+	userServicePackage "github.com/fanfit/user-service/models/users/service"
 
 	// Creators Tag
-	creatorRepository "github.com/fanfit/login/models/creators/repository"
-	creatorServicePackage "github.com/fanfit/login/models/creators/service"
+	creatorRepository "github.com/fanfit/user-service/models/creators/repository"
+	creatorServicePackage "github.com/fanfit/user-service/models/creators/service"
 
 	// Clients Tag
-	clientRepository "github.com/fanfit/login/models/clients/repository"
-	clientServicePackage "github.com/fanfit/login/models/clients/service"
+	clientRepository "github.com/fanfit/user-service/models/clients/repository"
+	clientServicePackage "github.com/fanfit/user-service/models/clients/service"
 
-	"github.com/fanfit/login/api/middleware"
-	"github.com/fanfit/login/server"
+	"github.com/fanfit/user-service/api/middleware"
+	"github.com/fanfit/user-service/server"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )

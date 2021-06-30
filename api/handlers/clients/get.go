@@ -3,8 +3,8 @@ package clients
 import (
 	"net/http"
 
-	"github.com/fanfit/login/api/views"
-	"github.com/fanfit/login/models/clients/service"
+	"github.com/fanfit/user-service/api/views"
+	"github.com/fanfit/user-service/models/clients/service"
 	"github.com/gin-gonic/gin"
 )
 

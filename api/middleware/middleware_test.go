@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
-	handler "github.com/fanfit/login/api/handlers"
-	"github.com/fanfit/login/api/middleware"
-	"github.com/fanfit/login/api/middleware/injection"
-	"github.com/fanfit/login/testutil"
+	handler "github.com/fanfit/user-service/api/handlers"
+	"github.com/fanfit/user-service/api/middleware"
+	"github.com/fanfit/user-service/api/middleware/injection"
+	"github.com/fanfit/user-service/testutil"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

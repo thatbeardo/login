@@ -1,7 +1,7 @@
 package creators
 
 import (
-	"github.com/fanfit/login/models/creators/service"
+	"github.com/fanfit/user-service/models/creators/service"
 	"github.com/gin-gonic/gin"
 )
 

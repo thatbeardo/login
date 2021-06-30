@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/fanfit/login/api/views"
-	"github.com/fanfit/login/models/users/repository"
-	"github.com/fanfit/login/models/users/service"
+	"github.com/fanfit/user-service/api/views"
+	"github.com/fanfit/user-service/models/users/repository"
+	"github.com/fanfit/user-service/models/users/service"
 
 	"github.com/gin-gonic/gin"
 )
