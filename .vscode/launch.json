@@ -13,11 +13,12 @@
       "env": {
         "HOST": "localhost",
         "PORT": "8080",
-        "DB_HOST": "",
-        "DB_NAME": "",
-        "DB_PASSWORD": "",
+        "DB_HOST": "test",
+        "DB_NAME": "test",
+        "DB_PASSWORD": "test",
         "DB_PORT": 5432,
-        "DB_USERNAME": ""      
+        "DB_USERNAME": "test",
+        "DB_SCHEMA": "login"
       },
       "args": []
     }

@@ -15,13 +15,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"os"
-	"time"
 
 	// API Routes
-	clientHandlers "github.com/fanfit/login/api/handlers/clients"
-	creatorHandlers "github.com/fanfit/login/api/handlers/creators"
+
 	userHandlers "github.com/fanfit/login/api/handlers/users"
 
 	// Tags
@@ -30,40 +30,58 @@ import (
 	userServicePackage "github.com/fanfit/login/models/users/service"
 
 	// Creators Tag
-	creatorRepository "github.com/fanfit/login/models/creators/repository"
-	creatorServicePackage "github.com/fanfit/login/models/creators/service"
 
 	// Clients Tag
-	clientRepository "github.com/fanfit/login/models/clients/repository"
-	clientServicePackage "github.com/fanfit/login/models/clients/service"
 
 	"github.com/fanfit/login/api/middleware"
 	"github.com/fanfit/login/server"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
+type envVars struct {
+	dbUserName string
+	dbPassword string
+	dbHost     string
+	dbPort     string
+	dbName     string
+	dbSchema   string
+}
+
 func main() {
-	log := logrus.New()
-	log.Formatter = &logrus.TextFormatter{
-		TimestampFormat: time.StampMilli,
-		FullTimestamp:   true,
-	}
-	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
-	db, err := server.CreatePostGresConnection(log, dbURL)
+	envVars, err := loadEnvVars()
 	if err != nil {
-		fmt.Print("Something went wrong!" + err.Error())
+		fmt.Printf("Error while loading Env variables: %s", err.Error())
 	}
+
+	dbURL := url.URL{
+		Scheme: "postgres",
+		User:   url.UserPassword(envVars.dbUserName, envVars.dbPassword),
+		Host:   fmt.Sprintf("%s:%s", envVars.dbHost, envVars.dbPort),
+		Path:   envVars.dbName,
+	}
+
+	q := dbURL.Query()
+	q.Add("schema", envVars.dbSchema)
+	encodedURL := q.Encode()
+
+	// dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USERNAME"), , , os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+	// db, err := server.CreatePostGresConnection(log, dbURL)
+	// if err != nil {
+	// 	fmt.Print("Something went wrong!" + err.Error())
+	// }
 
 	// Instantiate service for each tag
-	userStore := userRepository.NewUserStore(db)
+	userStore, err := userRepository.NewUserStore(encodedURL)
+	if err != nil {
+		fmt.Printf("Error while creating userStore: %s", err.Error())
+	}
 	userService := userServicePackage.New(userStore)
 
-	creatorStore := creatorRepository.NewUserStore(db)
-	creatorService := creatorServicePackage.New(creatorStore)
+	// creatorStore := creatorRepository.NewUserStore(db)
+	// creatorService := creatorServicePackage.New(creatorStore)
 
-	clientStore := clientRepository.NewUserStore(db)
-	clientService := clientServicePackage.New(clientStore)
+	// clientStore := clientRepository.NewUserStore(db)
+	// clientService := clientServicePackage.New(clientStore)
 
 	// Initialize the middleware and routes
 	engine := gin.Default()
@@ -72,8 +90,49 @@ func main() {
 	// Set routes for each tag
 	router.Use(middleware.VerifyToken)
 	userHandlers.Routes(router, userService)
-	clientHandlers.Routes(router, clientService)
-	creatorHandlers.Routes(router, creatorService)
+	// clientHandlers.Routes(router, clientService)
+	// creatorHandlers.Routes(router, creatorService)
 
-	server.Orchestrate(engine, db)
+	server.Orchestrate(engine, userStore)
+}
+
+func loadEnvVars() (*envVars, error) {
+	dbUsername, envPresent := os.LookupEnv("DB_USERNAME")
+	if !envPresent {
+		return nil, errors.New("DB_USERNAME environment variable missing")
+	}
+
+	dbPassword, envPresent := os.LookupEnv("DB_PASSWORD")
+	if !envPresent {
+		return nil, errors.New("DB_PASSWORD environment variable missing")
+	}
+
+	dbHost, envPresent := os.LookupEnv("DB_HOST")
+	if !envPresent {
+		return nil, errors.New("DB_HOST environment variable missing")
+	}
+
+	dbPort, envPresent := os.LookupEnv("DB_PORT")
+	if !envPresent {
+		return nil, errors.New("DB_PORT environment variable missing")
+	}
+
+	dbName, envPresent := os.LookupEnv("DB_NAME")
+	if !envPresent {
+		return nil, errors.New("DB_NAME environment variable missing")
+	}
+
+	dbSchema, envPresent := os.LookupEnv("DB_SCHEMA")
+	if !envPresent {
+		return nil, errors.New("DB_SCHEMA environment variable missing")
+	}
+
+	return &envVars{
+		dbUserName: dbUsername,
+		dbPassword: dbPassword,
+		dbHost:     dbHost,
+		dbPort:     dbPort,
+		dbName:     dbName,
+		dbSchema:   dbSchema,
+	}, nil
 }

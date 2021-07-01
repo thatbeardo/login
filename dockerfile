@@ -1,5 +1,5 @@
 # start from golang image based on alpine-3.8
-FROM golang:1.14-alpine3.11 AS dev-build
+FROM golang:1.16.5-alpine3.14 AS dev-build
 
 WORKDIR /go/src/app
 ADD . /go/src/app

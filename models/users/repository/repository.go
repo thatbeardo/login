@@ -5,6 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
+	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/stdlib"
 )
 
 // Repository is used by the service to communicate with the underlying database
@@ -18,6 +21,8 @@ type Repository interface {
 	GetByEmail(context.Context, string) (User, error)
 
 	Create(ctx context.Context, user User) (GetClientByIDRow, error)
+
+	Close() error
 }
 
 type repository struct {
@@ -85,9 +90,21 @@ func (repo *repository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func NewUserStore(db *sql.DB) Repository {
-	return &repository{
-		queries: New(db),
-		db:      db,
+// Delete function deletes a node from the graph
+func (repo *repository) Close() error {
+	return repo.db.Close()
+}
+
+func NewUserStore(dbURL string) (Repository, error) {
+	c, err := pgx.ParseConfig(dbURL)
+	if err != nil {
+		return nil, fmt.Errorf("parsing postgres URI: %w", err)
 	}
+
+	db := stdlib.OpenDB(*c)
+
+	return &repository{
+		db:      db,
+		queries: New(db),
+	}, nil
 }

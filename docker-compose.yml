@@ -1,5 +1,5 @@
 version: '3.6'
-services: 
+services:
     login:
         build: .
         container_name: login
@@ -7,9 +7,10 @@ services:
             - postgres
         ports:
             - 8080:8080
-        environment: 
+        environment:
             HOST: localhost
             PORT: 8080
+            DB_SCHEMA: login
             DB_USERNAME: root
             DB_PASSWORD: root
             DB_HOST: postgres
@@ -19,22 +20,22 @@ services:
     postgres:
         image: postgres
         restart: always
-        environment: 
+        environment:
             - DATABASE_HOST=127.0.0.1
             - POSTGRES_USER=root
             - POSTGRES_PASSWORD=root
-            - POSTGRES_DB=root  
-        ports: 
+            - POSTGRES_DB=root
+        ports:
             - 5432:5432
-        volumes: 
+        volumes:
             - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-    
+
     pgadmin-compose:
         image: dpage/pgadmin4
-        environment: 
+        environment:
             PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
             PGADMIN_DEFAULT_PASSWORD: "test123!"
-        ports: 
+        ports:
             - "16543:80"
-        depends_on: 
-            - postgres  
+        depends_on:
+            - postgres
