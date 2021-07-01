@@ -1,16 +1,26 @@
 package users_test
 
 import (
+	"database/sql"
 	"net/http"
 	"testing"
 
-	handler "github.com/fanfit/login/api/handlers"
-	"github.com/fanfit/login/api/handlers/users"
-	"github.com/fanfit/login/models/users/service"
+	"github.com/fanfit/login/models/users/repository"
 	"github.com/fanfit/login/testutil"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 )
+
+var testUser = repository.User{
+	ID:             0,
+	UserTypeID:     0,
+	FirstName:      "",
+	LastName:       "",
+	Email:          "",
+	Username:       sql.NullString{},
+	PhoneNo:        sql.NullString{},
+	Gender:         sql.NullString{},
+	ProfilePicture: sql.NullString{},
+	Bio:            sql.NullString{},
+}
 
 func TestHandler_InvalidPathCalled_StatusNotFound(t *testing.T) {
 	mockService := mockService{}
@@ -22,11 +32,12 @@ func TestHandler_InvalidPathCalled_StatusNotFound(t *testing.T) {
 	testutil.ValidateResponse(t, response, testutil.GenerateError("", "query-parameter-todo", "Path not found", http.StatusNotFound), http.StatusNotFound)
 }
 
-func setupRouter(s service.Service) *gin.Engine {
-	r := gin.Default()
-	r.Use(cors.Default())
-	r.NoRoute(handler.NoRoute)
-	group := r.Group("/v1")
-	users.Routes(group, s)
-	return r
+func TestHandler_ValidPathCalled_StatusNotFound(t *testing.T) {
+	mockService := mockService{GetByIDResponse: testUser}
+
+	router := setupRouter(mockService)
+	response, cleanup := testutil.PerformRequest(router, "GET", "/v1/users/whatever", "")
+	defer cleanup()
+
+	testutil.ValidateResponse(t, response, testUser, http.StatusOK)
 }
