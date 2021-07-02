@@ -12,6 +12,7 @@ import (
 type Repository interface {
 	GetCreatorByEmail(context.Context, string) (GetCreatorByEmailRow, error)
 	CreateCreator(context.Context, Creator) (Creator, error)
+	Close() error
 }
 
 type repository struct {
@@ -38,6 +39,10 @@ func (repo *repository) CreateCreator(ctx context.Context, cons Creator) (Creato
 		fmt.Print(err)
 	}
 	return response, err
+}
+
+func (repo *repository) Close() error {
+	return repo.db.Close()
 }
 
 func NewUserStore(dbURL string) (Repository, error) {

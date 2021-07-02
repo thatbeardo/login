@@ -17,17 +17,22 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/url"
 	"os"
 
 	// API Routes
 
+	creatorHandlers "github.com/fanfit/login/api/handlers/creators"
 	userHandlers "github.com/fanfit/login/api/handlers/users"
 
 	// Tags
 	// Users Tag
 	userRepository "github.com/fanfit/login/models/users/repository"
 	userServicePackage "github.com/fanfit/login/models/users/service"
+
+	creatorRepository "github.com/fanfit/login/models/creators/repository"
+	creatorServicePackage "github.com/fanfit/login/models/creators/service"
 
 	// Creators Tag
 
@@ -49,24 +54,23 @@ type envVars struct {
 func main() {
 	envVars, err := loadEnvVars()
 	if err != nil {
-		fmt.Printf("Error while loading Env variables: %s", err.Error())
+		log.Fatal(fmt.Sprintf("Error while loading Env variables: %s", err.Error()))
 	}
 	dbURL := prepareDbURL(envVars)
 
 	// Instantiate service for each tag
 	userStore, err := userRepository.NewUserStore(dbURL)
 	if err != nil {
-		fmt.Printf("Error while creating userStore: %s", err.Error())
-		os.Exit(1)
+		log.Fatal(fmt.Printf("Error while creating userStore: %s", err.Error()))
 	}
 	userService := userServicePackage.New(userStore)
 
-	// creatorStore, err := creatorRepository.NewUserStore(dbURL)
-	// if err != nil {
-	// 	fmt.Printf("Error while creating userStore: %s", err.Error())
-	// 	os.Exit(1)
-	// }
-	// creatorService := creatorServicePackage.New(creatorStore)
+	creatorStore, err := creatorRepository.NewUserStore(dbURL)
+	if err != nil {
+		fmt.Printf("Error while creating userStore: %s", err.Error())
+		os.Exit(1)
+	}
+	creatorService := creatorServicePackage.New(creatorStore)
 
 	// clientStore := clientRepository.NewUserStore(db)
 	// clientService := clientServicePackage.New(clientStore)
@@ -78,10 +82,10 @@ func main() {
 	// Set routes for each tag
 	// router.Use(middleware.VerifyToken)
 	userHandlers.Routes(router, userService)
-	// creatorHandlers.Routes(router, creatorService)
+	creatorHandlers.Routes(router, creatorService)
 	// clientHandlers.Routes(router, clientService)
 
-	server.Orchestrate(engine, userStore)
+	server.Orchestrate(engine, userStore, creatorStore)
 }
 
 func loadEnvVars() (*envVars, error) {
