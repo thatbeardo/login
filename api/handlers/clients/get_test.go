@@ -1,28 +1,11 @@
 package clients_test
 
 import (
-	"database/sql"
 	"net/http"
 	"testing"
 
-	"github.com/fanfit/login/models/clients/repository"
 	"github.com/fanfit/login/testutil"
 )
-
-var testUser = repository.GetClientByEmailRow{
-	ID:             0,
-	UserTypeID:     0,
-	FirstName:      "",
-	LastName:       "",
-	Email:          "",
-	Username:       sql.NullString{},
-	PhoneNo:        sql.NullString{},
-	Gender:         sql.NullString{},
-	ProfilePicture: sql.NullString{},
-	Bio:            sql.NullString{},
-	FanfitUserID:   0,
-	TempField:      sql.NullString{},
-}
 
 func TestHandler_InvalidPathCalled_StatusNotFound(t *testing.T) {
 	mockService := mockService{}

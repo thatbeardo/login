@@ -2,6 +2,7 @@ package clients_test
 
 import (
 	"context"
+	"database/sql"
 
 	handler "github.com/fanfit/login/api/handlers"
 	"github.com/fanfit/login/api/handlers/clients"
@@ -34,4 +35,19 @@ func setupRouter(s service.Service) *gin.Engine {
 	group := r.Group("/v1")
 	clients.Routes(group, s)
 	return r
+}
+
+var testUser = repository.GetClientByEmailRow{
+	ID:             0,
+	UserTypeID:     0,
+	FirstName:      "Jason",
+	LastName:       "Gomez",
+	Email:          "jigomez@usc.edu",
+	Username:       sql.NullString{},
+	PhoneNo:        sql.NullString{},
+	Gender:         sql.NullString{},
+	ProfilePicture: sql.NullString{},
+	Bio:            sql.NullString{},
+	FanfitUserID:   0,
+	TempField:      sql.NullString{},
 }

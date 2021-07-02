@@ -26,7 +26,7 @@ var testUser2 = repository.GetClientByIDRow{
 	TempField:      sql.NullString{},
 }
 
-func TestHandler_InvalidPayload_StatusNotFound(t *testing.T) {
+func TestHandler_InvalidPath_StatusNotFound(t *testing.T) {
 	mockService := mockService{}
 	router := setupRouter(mockService)
 	response, cleanup := testutil.PerformRequest(router, "POST", "/v1/invalid-path/", "")
