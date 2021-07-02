@@ -61,7 +61,11 @@ func main() {
 	}
 	userService := userServicePackage.New(userStore)
 
-	// creatorStore := creatorRepository.NewUserStore(db)
+	// creatorStore, err := creatorRepository.NewUserStore(dbURL)
+	// if err != nil {
+	// 	fmt.Printf("Error while creating userStore: %s", err.Error())
+	// 	os.Exit(1)
+	// }
 	// creatorService := creatorServicePackage.New(creatorStore)
 
 	// clientStore := clientRepository.NewUserStore(db)
@@ -74,8 +78,8 @@ func main() {
 	// Set routes for each tag
 	// router.Use(middleware.VerifyToken)
 	userHandlers.Routes(router, userService)
-	// clientHandlers.Routes(router, clientService)
 	// creatorHandlers.Routes(router, creatorService)
+	// clientHandlers.Routes(router, clientService)
 
 	server.Orchestrate(engine, userStore)
 }

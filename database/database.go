@@ -26,7 +26,7 @@ func EstablishConnection(dbURL string) (*sql.DB, error) {
 
 	err = validateSchema(db)
 	if err != nil {
-		return nil, fmt.Errorf("parsing postgres URI: %w", err)
+		return nil, fmt.Errorf("validate schema failed: %w", err)
 	}
 
 	return db, nil
@@ -40,7 +40,7 @@ func validateSchema(db *sql.DB) error {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations",
+		"file://database/migrations",
 		"postgres", driver)
 	if err != nil {
 		return err

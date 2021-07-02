@@ -2,7 +2,10 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+
+	"github.com/fanfit/login/database"
 )
 
 // Repository is used by the service to communicate with the underlying database
@@ -13,6 +16,7 @@ type Repository interface {
 
 type repository struct {
 	queries *Queries
+	db      *sql.DB
 }
 
 // GetCreatorByEmail with fan_fit_userid
@@ -24,17 +28,11 @@ func (repo *repository) GetCreatorByEmail(ctx context.Context, FanfitUserID stri
 	}
 
 	return temp, err
-
 }
 
 // Create Users
 func (repo *repository) CreateCreator(ctx context.Context, cons Creator) (Creator, error) {
-	response, err := repo.queries.CreateCreator(ctx, CreateCreatorParams{
-		FanfitUserID:      cons.FanfitUserID,
-		PaymentInfo:       cons.PaymentInfo,
-		LogoPicture:       cons.LogoPicture,
-		BackgroundPicture: cons.BackgroundPicture,
-	})
+	response, err := repo.queries.CreateCreator(ctx, CreateCreatorParams(cons))
 
 	if err != nil {
 		fmt.Print(err)
@@ -42,8 +40,14 @@ func (repo *repository) CreateCreator(ctx context.Context, cons Creator) (Creato
 	return response, err
 }
 
-func NewUserStore(db DBTX) Repository {
-	return &repository{
-		queries: New(db),
+func NewUserStore(dbURL string) (Repository, error) {
+	db, err := database.EstablishConnection(dbURL)
+	if err != nil {
+		fmt.Println("Error while establishing connection with databse " + err.Error())
 	}
+
+	return &repository{
+		db:      db,
+		queries: New(db),
+	}, nil
 }

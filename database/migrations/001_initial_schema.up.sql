@@ -1,10 +1,10 @@
 BEGIN;
 
-CREATE TABLE user_types (
+CREATE TABLE IF NOT EXISTS user_types (
     id      INT PRIMARY KEY,
     description    TEXT NOT NULL
 );
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id              SERIAL     PRIMARY KEY,
     user_type_id    INT     NOT NULL,
     first_name      TEXT    NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE users (
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
 
-CREATE TABLE clients (
+CREATE TABLE IF NOT EXISTS clients (
     fanfit_user_id      INT     NOT NULL,
     temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),

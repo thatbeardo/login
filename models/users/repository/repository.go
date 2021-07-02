@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 
 	"github.com/fanfit/login/database"
 )
@@ -59,7 +58,7 @@ func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow
 	})
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 	_, err = repo.queries.WithTx(transaction).CreateClient(ctx, CreateClientParams{
 		FanfitUserID: response.ID,
@@ -67,19 +66,19 @@ func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow
 	})
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 
 	fullClientobj, err := repo.queries.WithTx(transaction).GetClientByID(ctx, response.ID)
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 
 	// Commit the change if all queries ran successfully
 	err = transaction.Commit()
 	if err != nil {
-		log.Fatal(err)
+		return GetClientByIDRow{}, err
 	}
 	return fullClientobj, err
 }
