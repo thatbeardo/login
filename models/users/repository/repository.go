@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/stdlib"
+	"github.com/fanfit/login/database"
 )
 
 // Repository is used by the service to communicate with the underlying database
@@ -96,16 +95,11 @@ func (repo *repository) Close() error {
 }
 
 func NewUserStore(dbURL string) (Repository, error) {
-	c, err := pgx.ParseConfig(dbURL)
+	db, err := database.EstablishConnection(dbURL)
 	if err != nil {
-		return nil, fmt.Errorf("parsing postgres URI: %w", err)
+		fmt.Println("Error while establishing connection with databse " + err.Error())
 	}
 
-	db := stdlib.OpenDB(*c)
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("Error establishing database connection" + err.Error())
-	}
 	return &repository{
 		db:      db,
 		queries: New(db),

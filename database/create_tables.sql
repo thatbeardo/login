@@ -39,7 +39,6 @@ CREATE TABLE login.clients (
     FOREIGN KEY (fanfit_user_id) REFERENCES login.users(id)
 );
 
-
 INSERT INTO login.user_types(id, description) VALUES(0, 'Creator');
 INSERT INTO login.user_types(id, description) VALUES(1, 'Clients');
 

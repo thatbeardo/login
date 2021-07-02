@@ -1,3 +1,5 @@
+BEGIN;
+
 CREATE TABLE user_types (
     id      INT PRIMARY KEY,
     description    TEXT NOT NULL
@@ -23,3 +25,5 @@ CREATE TABLE clients (
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
+
+COMMIT;
