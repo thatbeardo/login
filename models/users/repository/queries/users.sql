@@ -1,12 +1,12 @@
 -- name: GetUserByEmail :one
-SELECT * FROM users 
+SELECT * FROM users
 WHERE email = $1;
 
 
 -- name: CreateUser :one
-INSERT INTO users ( 
+INSERT INTO users (
   first_name,
-  last_name, 
+  last_name,
   email,
   user_type_id,
   username,
@@ -15,15 +15,15 @@ INSERT INTO users (
   profile_picture,
   bio
 ) VALUES (
-  $1, 
-  $2, 
+  $1,
+  $2,
   $3,
-  $4, 
-  $5, 
+  $4,
+  $5,
   $6,
-  $7, 
-  $8, 
-  $9 
+  $7,
+  $8,
+  $9
 )
 RETURNING *;
 

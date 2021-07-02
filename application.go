@@ -33,7 +33,6 @@ import (
 
 	// Clients Tag
 
-	"github.com/fanfit/login/api/middleware"
 	"github.com/fanfit/login/server"
 	"github.com/gin-gonic/gin"
 )
@@ -52,28 +51,13 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error while loading Env variables: %s", err.Error())
 	}
-
-	dbURL := url.URL{
-		Scheme: "postgres",
-		User:   url.UserPassword(envVars.dbUserName, envVars.dbPassword),
-		Host:   fmt.Sprintf("%s:%s", envVars.dbHost, envVars.dbPort),
-		Path:   envVars.dbName,
-	}
-
-	q := dbURL.Query()
-	q.Add("schema", envVars.dbSchema)
-	encodedURL := q.Encode()
-
-	// dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", os.Getenv("DB_USERNAME"), , , os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
-	// db, err := server.CreatePostGresConnection(log, dbURL)
-	// if err != nil {
-	// 	fmt.Print("Something went wrong!" + err.Error())
-	// }
+	dbURL := prepareDbURL(envVars)
 
 	// Instantiate service for each tag
-	userStore, err := userRepository.NewUserStore(encodedURL)
+	userStore, err := userRepository.NewUserStore(dbURL)
 	if err != nil {
 		fmt.Printf("Error while creating userStore: %s", err.Error())
+		os.Exit(1)
 	}
 	userService := userServicePackage.New(userStore)
 
@@ -88,7 +72,7 @@ func main() {
 	router := server.GenerateRouter(engine)
 
 	// Set routes for each tag
-	router.Use(middleware.VerifyToken)
+	// router.Use(middleware.VerifyToken)
 	userHandlers.Routes(router, userService)
 	// clientHandlers.Routes(router, clientService)
 	// creatorHandlers.Routes(router, creatorService)
@@ -135,4 +119,18 @@ func loadEnvVars() (*envVars, error) {
 		dbName:     dbName,
 		dbSchema:   dbSchema,
 	}, nil
+}
+
+func prepareDbURL(envVars *envVars) string {
+	dbURL := url.URL{
+		Scheme: "postgres",
+		User:   url.UserPassword(envVars.dbUserName, envVars.dbPassword),
+		Host:   fmt.Sprintf("%s:%s", envVars.dbHost, envVars.dbPort),
+		Path:   envVars.dbName,
+	}
+
+	q := dbURL.Query()
+	q.Add("search_path", envVars.dbSchema)
+	dbURL.RawQuery = q.Encode()
+	return dbURL.String()
 }

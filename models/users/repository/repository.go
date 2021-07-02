@@ -44,7 +44,7 @@ func (repo *repository) GetByEmail(ctx context.Context, email string) (User, err
 func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow, error) {
 	transaction, err := repo.db.BeginTx(ctx, &sql.TxOptions{})
 	if err != nil {
-		fmt.Print("somethinbg went wrong")
+		fmt.Print("something went wrong while executing transaction: " + err.Error())
 	}
 
 	response, err := repo.queries.WithTx(transaction).CreateUser(ctx, CreateUserParams{
@@ -102,7 +102,10 @@ func NewUserStore(dbURL string) (Repository, error) {
 	}
 
 	db := stdlib.OpenDB(*c)
-
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("Error establishing database connection" + err.Error())
+	}
 	return &repository{
 		db:      db,
 		queries: New(db),
