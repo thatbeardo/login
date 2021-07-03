@@ -23,22 +23,22 @@ import (
 
 	// API Routes
 
-	creatorHandlers "github.com/fanfit/user/api/handlers/creators"
-	userHandlers "github.com/fanfit/user/api/handlers/users"
+	creatorHandlers "github.com/fanfit/user-service/api/handlers/creators"
+	userHandlers "github.com/fanfit/user-service/api/handlers/users"
 
 	// Tags
 	// Users Tag
 	userRepository "github.com/fanfit/user-service/models/users/repository"
 	userServicePackage "github.com/fanfit/user-service/models/users/service"
 
-	creatorRepository "github.com/fanfit/user/models/creators/repository"
-	creatorServicePackage "github.com/fanfit/user/models/creators/service"
+	creatorRepository "github.com/fanfit/user-service/models/creators/repository"
+	creatorServicePackage "github.com/fanfit/user-service/models/creators/service"
 
 	// Creators Tag
 
 	// Clients Tag
 
-	"github.com/fanfit/user/server"
+	"github.com/fanfit/user-service/server"
 	"github.com/gin-gonic/gin"
 )
 

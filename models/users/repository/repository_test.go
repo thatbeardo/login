@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/fanfit/user/models/users/repository"
+	"github.com/fanfit/user-service/models/users/repository"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
 	"github.com/stretchr/testify/assert"

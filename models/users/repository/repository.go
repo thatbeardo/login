@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/fanfit/user/database"
+	"github.com/fanfit/user-service/database"
 )
 
 // Repository is used by the service to communicate with the underlying database
