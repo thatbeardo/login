@@ -65,7 +65,7 @@ func main() {
 	}
 	userService := userServicePackage.New(userStore)
 
-	creatorStore, err := creatorRepository.NewUserStore(dbURL)
+	creatorStore, err := creatorRepository.NewCreatorStore(dbURL)
 	if err != nil {
 		fmt.Printf("Error while creating userStore: %s", err.Error())
 		os.Exit(1)
