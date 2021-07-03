@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS user_types (
     id      INT PRIMARY KEY,
     description    TEXT NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS users (
     id              SERIAL     PRIMARY KEY,
     user_type_id    INT     NOT NULL,
@@ -23,6 +24,14 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS clients (
     fanfit_user_id      INT     NOT NULL,
     temp_field          TEXT       NULL,
+    PRIMARY KEY (fanfit_user_id),
+    FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS creators (
+    fanfit_user_id      INT        NOT NULL,
+    payment_info        TEXT       NULL,
+    logo_picture        TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );

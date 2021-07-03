@@ -3,7 +3,7 @@ packages:
   - name: "repository"
     path: "."
     queries: "queries"
-    schema: "migrations"
+    schema: "../../../database/migrations"
     engine: "postgresql"
     emit_json_tags: false
     emit_prepared_queries: false
