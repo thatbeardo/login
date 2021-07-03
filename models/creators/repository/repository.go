@@ -45,7 +45,7 @@ func (repo *repository) Close() error {
 	return repo.db.Close()
 }
 
-func NewUserStore(dbURL string) (Repository, error) {
+func NewCreatorStore(dbURL string) (Repository, error) {
 	db, err := database.EstablishConnection(dbURL)
 	if err != nil {
 		fmt.Println("Error while establishing connection with databse " + err.Error())
