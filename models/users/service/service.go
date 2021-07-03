@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/fanfit/login/models/users/repository"
+	"github.com/fanfit/user-service/models/users/repository"
 )
 
 // Service receives commands from handlers and forwards them to the repository

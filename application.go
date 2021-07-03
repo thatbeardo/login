@@ -1,4 +1,4 @@
-// @title Fan fit login
+// @title Fan fit user-service
 // @version 0.1.0
 
 // @license.name Apache 2.0
@@ -23,22 +23,22 @@ import (
 
 	// API Routes
 
-	creatorHandlers "github.com/fanfit/login/api/handlers/creators"
-	userHandlers "github.com/fanfit/login/api/handlers/users"
+	creatorHandlers "github.com/fanfit/user/api/handlers/creators"
+	userHandlers "github.com/fanfit/user/api/handlers/users"
 
 	// Tags
 	// Users Tag
-	userRepository "github.com/fanfit/login/models/users/repository"
-	userServicePackage "github.com/fanfit/login/models/users/service"
+	userRepository "github.com/fanfit/user-service/models/users/repository"
+	userServicePackage "github.com/fanfit/user-service/models/users/service"
 
-	creatorRepository "github.com/fanfit/login/models/creators/repository"
-	creatorServicePackage "github.com/fanfit/login/models/creators/service"
+	creatorRepository "github.com/fanfit/user/models/creators/repository"
+	creatorServicePackage "github.com/fanfit/user/models/creators/service"
 
 	// Creators Tag
 
 	// Clients Tag
 
-	"github.com/fanfit/login/server"
+	"github.com/fanfit/user/server"
 	"github.com/gin-gonic/gin"
 )
 

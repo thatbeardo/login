@@ -3,7 +3,7 @@ package injection
 import (
 	"encoding/json"
 
-	"github.com/fanfit/login/api/authentication"
+	"github.com/fanfit/user-service/api/authentication"
 )
 
 // Reset takes all injected variables to their original values

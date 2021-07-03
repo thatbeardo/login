@@ -17,9 +17,9 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"github.com/fanfit/login/docs"
-	creatorRepository "github.com/fanfit/login/models/creators/repository"
-	"github.com/fanfit/login/models/users/repository"
+	"github.com/fanfit/user/docs"
+	creatorRepository "github.com/fanfit/user/models/creators/repository"
+	"github.com/fanfit/user/models/users/repository"
 )
 
 // GenerateRouter instantiates and initializes a new Router.

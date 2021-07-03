@@ -3,7 +3,7 @@ package creators_test
 import (
 	"context"
 
-	"github.com/fanfit/login/models/creators/repository"
+	"github.com/fanfit/user-service/models/creators/repository"
 )
 
 type mockService struct {
