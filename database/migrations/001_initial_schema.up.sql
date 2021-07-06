@@ -1,13 +1,11 @@
 BEGIN;
 
-CREATE TABLE IF NOT EXISTS user_types (
-    id      INT PRIMARY KEY,
-    description    TEXT NOT NULL
-);
+
+CREATE TYPE user_type AS ENUM ('client', 'creator');
 
 CREATE TABLE IF NOT EXISTS users (
     id              SERIAL     PRIMARY KEY,
-    user_type_id    INT     NOT NULL,
+    user_type    user_type     NOT NULL,
     first_name      TEXT    NOT NULL,
     last_name       TEXT    NOT NULL,
     email           TEXT    NOT NULL UNIQUE,
@@ -17,8 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
-    background_picture TEXT         NULL,
-    FOREIGN KEY (user_type_id) REFERENCES user_types(id)
+    background_picture TEXT         NULL
 );
 
 CREATE TABLE IF NOT EXISTS clients (

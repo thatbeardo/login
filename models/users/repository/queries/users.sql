@@ -8,7 +8,7 @@ INSERT INTO users (
   first_name,
   last_name,
   email,
-  user_type_id,
+  user_type,
   username,
   phone_no,
   gender,
