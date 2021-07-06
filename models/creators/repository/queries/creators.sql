@@ -1,4 +1,3 @@
-
 -- name: CreateCreator :one
 INSERT INTO creators(
   fanfit_user_id,

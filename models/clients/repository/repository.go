@@ -2,7 +2,10 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+
+	"github.com/fanfit/user-service/database"
 )
 
 // Repository is used by the service to communicate with the underlying database
@@ -10,10 +13,12 @@ type Repository interface {
 	Delete(context.Context, string) error
 	CreateClient(context.Context, Client) (GetClientByIDRow, error)
 	GetClientByEmail(context.Context, string) (GetClientByEmailRow, error)
+	Close() error
 }
 
 type repository struct {
 	queries *Queries
+	db      *sql.DB
 }
 
 // GetClientByEmail
@@ -30,12 +35,6 @@ func (repo *repository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func NewUserStore(db DBTX) Repository {
-	return &repository{
-		queries: New(db),
-	}
-}
-
 // Create Client
 func (repo *repository) CreateClient(ctx context.Context, client Client) (GetClientByIDRow, error) {
 	response, err := repo.queries.CreateClient(ctx, CreateClientParams(client))
@@ -47,4 +46,20 @@ func (repo *repository) CreateClient(ctx context.Context, client Client) (GetCli
 		fmt.Print(err2)
 	}
 	return fullClientObj, err2
+}
+
+func (repo *repository) Close() error {
+	return repo.db.Close()
+}
+
+func NewClientStore(dbURL string) (Repository, error) {
+	db, err := database.EstablishConnection(dbURL)
+	if err != nil {
+		fmt.Println("Error while establishing connection with databse " + err.Error())
+	}
+
+	return &repository{
+		db:      db,
+		queries: New(db),
+	}, nil
 }

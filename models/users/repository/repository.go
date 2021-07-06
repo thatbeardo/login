@@ -4,7 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
+
+	"github.com/fanfit/user-service/database"
 )
 
 // Repository is used by the service to communicate with the underlying database
@@ -18,6 +19,8 @@ type Repository interface {
 	GetByEmail(context.Context, string) (User, error)
 
 	Create(ctx context.Context, user User) (GetClientByIDRow, error)
+
+	Close() error
 }
 
 type repository struct {
@@ -39,7 +42,7 @@ func (repo *repository) GetByEmail(ctx context.Context, email string) (User, err
 func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow, error) {
 	transaction, err := repo.db.BeginTx(ctx, &sql.TxOptions{})
 	if err != nil {
-		fmt.Print("somethinbg went wrong")
+		fmt.Print("something went wrong while executing transaction: " + err.Error())
 	}
 
 	response, err := repo.queries.WithTx(transaction).CreateUser(ctx, CreateUserParams{
@@ -55,7 +58,7 @@ func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow
 	})
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 	_, err = repo.queries.WithTx(transaction).CreateClient(ctx, CreateClientParams{
 		FanfitUserID: response.ID,
@@ -63,19 +66,19 @@ func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow
 	})
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 
 	fullClientobj, err := repo.queries.WithTx(transaction).GetClientByID(ctx, response.ID)
 	if err != nil {
 		transaction.Rollback()
-		fmt.Print(err)
+		return GetClientByIDRow{}, err
 	}
 
 	// Commit the change if all queries ran successfully
 	err = transaction.Commit()
 	if err != nil {
-		log.Fatal(err)
+		return GetClientByIDRow{}, err
 	}
 	return fullClientobj, err
 }
@@ -85,9 +88,19 @@ func (repo *repository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
-func NewUserStore(db *sql.DB) Repository {
-	return &repository{
-		queries: New(db),
-		db:      db,
+// Delete function deletes a node from the graph
+func (repo *repository) Close() error {
+	return repo.db.Close()
+}
+
+func NewUserStore(dbURL string) (Repository, error) {
+	db, err := database.EstablishConnection(dbURL)
+	if err != nil {
+		fmt.Println("Error while establishing connection with databse " + err.Error())
 	}
+
+	return &repository{
+		db:      db,
+		queries: New(db),
+	}, nil
 }

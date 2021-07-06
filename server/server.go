@@ -11,8 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	_ "github.com/jackc/pgx/stdlib"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -20,6 +18,8 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/fanfit/user-service/docs"
+	creatorRepository "github.com/fanfit/user-service/models/creators/repository"
+	"github.com/fanfit/user-service/models/users/repository"
 )
 
 // GenerateRouter instantiates and initializes a new Router.
@@ -54,7 +54,7 @@ func setupSwagger(r *gin.Engine) {
 }
 
 // Orchestrate begins listening on PORT and gracefully shuts down the server incase of interrupt
-func Orchestrate(router *gin.Engine, db *sql.DB) {
+func Orchestrate(router *gin.Engine, userRepository repository.Repository, creatorRepository creatorRepository.Repository) {
 	srv := &http.Server{
 		Addr:    ":" + os.Getenv("PORT"),
 		Handler: router,
@@ -82,7 +82,8 @@ func Orchestrate(router *gin.Engine, db *sql.DB) {
 	// the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	defer db.Close()
+	defer userRepository.Close()
+	defer creatorRepository.Close()
 
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown:", err)

@@ -33,9 +33,9 @@ func (q *Queries) CreateClient(ctx context.Context, arg CreateClientParams) (Cli
 }
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users ( 
+INSERT INTO users (
   first_name,
-  last_name, 
+  last_name,
   email,
   user_type_id,
   username,
@@ -45,14 +45,14 @@ INSERT INTO users (
   bio,
   background_picture
 ) VALUES (
-  $1, 
-  $2, 
+  $1,
+  $2,
   $3,
-  $4, 
-  $5, 
+  $4,
+  $5,
   $6,
-  $7, 
-  $8, 
+  $7,
+  $8,
   $9,
   $10
 )
@@ -175,7 +175,7 @@ func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetCli
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture FROM users 
+SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture FROM users
 WHERE email = $1
 `
 

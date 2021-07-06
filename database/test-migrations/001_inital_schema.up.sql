@@ -1,13 +1,12 @@
-DROP TABLE IF EXISTS user_types CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS clients CASCADE;
-DROP TABLE IF EXISTS creators CASCADE;
+BEGIN;
 
-CREATE TABLE user_types (
+
+CREATE TABLE IF NOT EXISTS user_types (
     id      INT PRIMARY KEY,
     description    TEXT NOT NULL
 );
-CREATE TABLE users (
+
+CREATE TABLE IF NOT EXISTS users (
     id              SERIAL     PRIMARY KEY,
     user_type_id    INT     NOT NULL,
     first_name      TEXT    NOT NULL,
@@ -19,19 +18,21 @@ CREATE TABLE users (
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
-    background_picture  TEXT    NULL,
+    background_picture TEXT         NULL,
     FOREIGN KEY (user_type_id) REFERENCES user_types(id)
 );
-CREATE TABLE creators (
+
+CREATE TABLE IF NOT EXISTS clients (
     fanfit_user_id      INT     NOT NULL,
-    payment_info        TEXT    NOT NULL,
-    logo_picture        TEXT    NOT NULL,
+    temp_field          TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
-CREATE TABLE clients (
-    fanfit_user_id      INT     NOT NULL,
-    temp_field          TEXT        NULL,
+
+CREATE TABLE IF NOT EXISTS creators (
+    fanfit_user_id      INT        NOT NULL,
+    payment_info        TEXT       NULL,
+    logo_picture        TEXT       NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
@@ -39,7 +40,6 @@ CREATE TABLE clients (
 
 INSERT INTO user_types(id, description) VALUES(0, 'Creator');
 INSERT INTO user_types(id, description) VALUES(1, 'Clients');
-
 -- Inserts a new creator
 DO $$
 DECLARE
@@ -75,24 +75,19 @@ BEGIN
     VALUES(last_id, 'rwbrtb', 'test_image');
 END $$;
 
--- Inserts a new client
-DO $$
-DECLARE
-    last_id INTEGER;
-BEGIN
-    INSERT INTO users(user_type_id, first_name, last_name, email)
-    VALUES(1, 'Gabe', 'Dalessandro', 'gabe@gmail.com')
-      RETURNING users.id INTO last_id;
-    INSERT INTO clients(fanfit_user_id)
-    VALUES(last_id);
-END $$;
-DO $$
-DECLARE
-    last_id INTEGER;
-BEGIN
-    INSERT INTO users(user_type_id, first_name, last_name, email)
-    VALUES(1, 'Harshil', 'Mavani', 'harshil@gmail.com')
-      RETURNING users.id INTO last_id;
-    INSERT INTO clients(fanfit_user_id)
-    VALUES(last_id);
-END $$;
+
+
+COMMIT;
+
+
+
+
+
+
+
+
+
+
+
+
+
