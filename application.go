@@ -23,20 +23,24 @@ import (
 
 	// API Routes
 
+	clientHandlers "github.com/fanfit/user-service/api/handlers/clients"
 	creatorHandlers "github.com/fanfit/user-service/api/handlers/creators"
 	userHandlers "github.com/fanfit/user-service/api/handlers/users"
+
+	"github.com/fanfit/user-service/api/middleware"
 
 	// Tags
 	// Users Tag
 	userRepository "github.com/fanfit/user-service/models/users/repository"
 	userServicePackage "github.com/fanfit/user-service/models/users/service"
 
+	// Creators Tag
 	creatorRepository "github.com/fanfit/user-service/models/creators/repository"
 	creatorServicePackage "github.com/fanfit/user-service/models/creators/service"
 
-	// Creators Tag
-
 	// Clients Tag
+	clientRepository "github.com/fanfit/user-service/models/clients/repository"
+	clientServicePackage "github.com/fanfit/user-service/models/clients/service"
 
 	"github.com/fanfit/user-service/server"
 	"github.com/gin-gonic/gin"
@@ -72,6 +76,12 @@ func main() {
 	}
 	creatorService := creatorServicePackage.New(creatorStore)
 
+	clientStore, err := clientRepository.NewClientStore(dbURL)
+	if err != nil {
+		fmt.Printf("Error while creating userStore: %s", err.Error())
+		os.Exit(1)
+	}
+	clientService := clientServicePackage.New(clientStore)
 	// clientStore := clientRepository.NewUserStore(db)
 	// clientService := clientServicePackage.New(clientStore)
 
@@ -80,10 +90,10 @@ func main() {
 	router := server.GenerateRouter(engine)
 
 	// Set routes for each tag
-	// router.Use(middleware.VerifyToken)
+	router.Use(middleware.VerifyToken)
 	userHandlers.Routes(router, userService)
 	creatorHandlers.Routes(router, creatorService)
-	// clientHandlers.Routes(router, clientService)
+	clientHandlers.Routes(router, clientService)
 
 	server.Orchestrate(engine, userStore, creatorStore)
 }
