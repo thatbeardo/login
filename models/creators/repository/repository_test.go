@@ -1,15 +1,19 @@
 package repository_test
 
 import (
+	"context"
 	"database/sql"
 	"net"
 	"net/url"
+	"os"
 	"runtime"
 	"testing"
 	"time"
 
+	"github.com/fanfit/user-service/models/creators/repository"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
+	"github.com/stretchr/testify/assert"
 )
 
 func startDatabase(tb testing.TB) string {
@@ -96,49 +100,32 @@ func startDatabase(tb testing.TB) string {
 	return pgURL.String()
 }
 
-// func TestGetCreator(t *testing.T) {
-// 	t.Parallel()
+func TestGetCreator(t *testing.T) {
+	os.Chdir("../../../")
+	t.Parallel()
 
-// 	creatorStore, err := repository.NewCreatorStore(startDatabase(t))
-// 	if err != nil {
-// 		t.Fatalf("Failed to create a new directory: %s", err)
-// 	}
-// 	t.Cleanup(func() {
-// 		err = creatorStore.Close()
-// 		if err != nil {
-// 			t.Errorf("Failed to close directory: %s", err)
-// 		}
-// 	})
+	creatorStore, err := repository.NewCreatorStore(startDatabase(t))
+	if err != nil {
+		t.Fatalf("Failed to create a new directory: %s", err)
+	}
+	t.Cleanup(func() {
+		err = creatorStore.Close()
+		if err != nil {
+			t.Errorf("Failed to close directory: %s", err)
+		}
+	})
 
-// 	ctx, cancel := context.WithCancel(context.Background())
-// 	t.Cleanup(cancel)
+	ctx, cancel := context.WithCancel(context.Background())
+	t.Cleanup(cancel)
 
-// 	t.Run("Add and retrieve a creator ", func(t *testing.T) {
-// 		t.Parallel()
+	t.Run("Retrieve a creator ", func(t *testing.T) {
+		t.Parallel()
 
-// 		addedUser, err := creatorStore.Cre(ctx, repository.User{
-// 			FirstName:  "test-name",
-// 			Email:      "test-email",
-// 			UserTypeID: 1,
-// 		})
-// 		if err != nil {
-// 			t.Fatalf("Failed to add users: %s", err)
-// 		}
+		creator, err := creatorStore.GetCreatorByEmail(ctx, "stefana@gmail.com")
+		if err != nil {
+			t.Fatalf("Failed to list users: %s", err)
+		}
 
-// 		addedCreator, err := creatorStore.CreateCreator(ctx, repository.Creator{
-// 			FanfitUserID: 1,
-// 			PaymentInfo: "oeinron3",
-// 			LogoPicture: "somwhere/aws",
-// 		})
-// 		if err != nil {
-// 			t.Fatalf("Failed to add creator: %s", err)
-// 		}
-
-// 		creator, err := creatorStore.GetCreatorByEmail(ctx, "test-email")
-// 		if err != nil {
-// 			t.Fatalf("Failed to list users: %s", err)
-// 		}
-
-// 		assert.Equal(t, user.Email, addedUser.Email)
-// 	})
-// }
+		assert.Equal(t, creator.Email, "stefana@gmail.com")
+	})
+}

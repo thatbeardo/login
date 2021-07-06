@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"net"
 	"net/url"
+	"os"
 	"runtime"
 	"testing"
 	"time"
@@ -100,6 +101,7 @@ func startDatabase(tb testing.TB) string {
 }
 
 func TestAddUsers(t *testing.T) {
+	os.Chdir("../../../")
 	t.Parallel()
 
 	userStore, err := repository.NewUserStore(startDatabase(t))
