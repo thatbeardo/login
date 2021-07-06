@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  Development Deployment:
+  dev-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
