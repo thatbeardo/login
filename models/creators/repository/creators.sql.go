@@ -24,8 +24,8 @@ RETURNING fanfit_user_id, payment_info, logo_picture
 
 type CreateCreatorParams struct {
 	FanfitUserID int32
-	PaymentInfo  sql.NullString
-	LogoPicture  sql.NullString
+	PaymentInfo  string
+	LogoPicture  string
 }
 
 func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error) {
@@ -55,8 +55,8 @@ type GetCreatorByEmailRow struct {
 	Bio               sql.NullString
 	BackgroundPicture sql.NullString
 	FanfitUserID      int32
-	PaymentInfo       sql.NullString
-	LogoPicture       sql.NullString
+	PaymentInfo       string
+	LogoPicture       string
 }
 
 func (q *Queries) GetCreatorByEmail(ctx context.Context, email string) (GetCreatorByEmailRow, error) {

@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS clients (
 
 CREATE TABLE IF NOT EXISTS creators (
     fanfit_user_id      INT        NOT NULL,
-    payment_info        TEXT       NULL,
-    logo_picture        TEXT       NULL,
+    payment_info        TEXT       NOT NULL,
+    logo_picture        TEXT       NOT NULL,
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );

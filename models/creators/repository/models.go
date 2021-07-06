@@ -34,8 +34,8 @@ type Client struct {
 
 type Creator struct {
 	FanfitUserID int32
-	PaymentInfo  sql.NullString
-	LogoPicture  sql.NullString
+	PaymentInfo  string
+	LogoPicture  string
 }
 
 type User struct {
