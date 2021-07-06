@@ -35,7 +35,7 @@ func (q *Queries) CreateClient(ctx context.Context, arg CreateClientParams) (Cli
 const deleteUser = `-- name: DeleteUser :one
 DELETE FROM users
 WHERE email = $1
-RETURNING id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture
+RETURNING id, user_type, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
@@ -43,7 +43,7 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.UserTypeID,
+		&i.UserType,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
@@ -59,14 +59,14 @@ func (q *Queries) DeleteUser(ctx context.Context, email string) (User, error) {
 }
 
 const getClientByEmail = `-- name: GetClientByEmail :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, temp_field FROM users INNER JOIN clients
+SELECT id, user_type, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, temp_field FROM users INNER JOIN clients
 ON users.id = clients.fanfit_user_id
 WHERE email = $1
 `
 
 type GetClientByEmailRow struct {
 	ID                int32
-	UserTypeID        int32
+	UserType          UserType
 	FirstName         string
 	LastName          string
 	Email             string
@@ -86,7 +86,7 @@ func (q *Queries) GetClientByEmail(ctx context.Context, email string) (GetClient
 	var i GetClientByEmailRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserTypeID,
+		&i.UserType,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
@@ -104,14 +104,14 @@ func (q *Queries) GetClientByEmail(ctx context.Context, email string) (GetClient
 }
 
 const getClientByID = `-- name: GetClientByID :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, temp_field FROM users INNER JOIN clients
+SELECT id, user_type, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, temp_field FROM users INNER JOIN clients
 ON users.id = clients.fanfit_user_id
 WHERE fanfit_user_id = $1
 `
 
 type GetClientByIDRow struct {
 	ID                int32
-	UserTypeID        int32
+	UserType          UserType
 	FirstName         string
 	LastName          string
 	Email             string
@@ -131,7 +131,7 @@ func (q *Queries) GetClientByID(ctx context.Context, fanfitUserID int32) (GetCli
 	var i GetClientByIDRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserTypeID,
+		&i.UserType,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,
