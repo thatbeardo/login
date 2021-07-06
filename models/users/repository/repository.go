@@ -49,7 +49,7 @@ func (repo *repository) Create(ctx context.Context, user User) (GetClientByIDRow
 		FirstName:      user.FirstName,
 		LastName:       user.LastName,
 		Email:          user.Email,
-		UserTypeID:     user.UserTypeID,
+		UserType:       user.UserType,
 		Username:       user.Username,
 		PhoneNo:        user.PhoneNo,
 		Gender:         user.Gender,

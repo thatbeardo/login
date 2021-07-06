@@ -4,17 +4,43 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
+
+type UserType string
+
+const (
+	UserTypeClient  UserType = "client"
+	UserTypeCreator UserType = "creator"
+)
+
+func (e *UserType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = UserType(s)
+	case string:
+		*e = UserType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for UserType: %T", src)
+	}
+	return nil
+}
 
 type Client struct {
 	FanfitUserID int32
 	TempField    sql.NullString
 }
 
+type Creator struct {
+	FanfitUserID int32
+	PaymentInfo  sql.NullString
+	LogoPicture  sql.NullString
+}
+
 type User struct {
 	ID                int32
-	UserTypeID        int32
+	UserType          UserType
 	FirstName         string
 	LastName          string
 	Email             string
@@ -25,9 +51,4 @@ type User struct {
 	ProfilePicture    sql.NullString
 	Bio               sql.NullString
 	BackgroundPicture sql.NullString
-}
-
-type UserType struct {
-	ID          int32
-	Description string
 }

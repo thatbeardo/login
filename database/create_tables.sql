@@ -6,13 +6,11 @@ DROP SCHEMA IF EXISTS login;
 
 CREATE SCHEMA IF NOT EXISTS login;
 
-CREATE TABLE IF NOT EXISTS login.user_types (
-    id      INT PRIMARY KEY,
-    description    TEXT NOT NULL
-);
+CREATE TYPE user_type AS ENUM ('client', 'creator');
+
 CREATE TABLE IF NOT EXISTS login.users (
     id              SERIAL     PRIMARY KEY,
-    user_type_id    INT     NOT NULL,
+    user_type    user_type     NOT NULL,
     first_name      TEXT    NOT NULL,
     last_name       TEXT    NOT NULL,
     email           TEXT    NOT NULL UNIQUE,
@@ -22,7 +20,6 @@ CREATE TABLE IF NOT EXISTS login.users (
     gender          TEXT    NULL,
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
-    FOREIGN KEY (user_type_id) REFERENCES login.user_types(id)
 );
 CREATE TABLE IF NOT EXISTS login.creators (
     fanfit_user_id      INT     NOT NULL,

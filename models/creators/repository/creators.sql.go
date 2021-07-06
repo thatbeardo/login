@@ -24,8 +24,8 @@ RETURNING fanfit_user_id, payment_info, logo_picture
 
 type CreateCreatorParams struct {
 	FanfitUserID int32
-	PaymentInfo  string
-	LogoPicture  string
+	PaymentInfo  sql.NullString
+	LogoPicture  sql.NullString
 }
 
 func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (Creator, error) {
@@ -36,14 +36,14 @@ func (q *Queries) CreateCreator(ctx context.Context, arg CreateCreatorParams) (C
 }
 
 const getCreatorByEmail = `-- name: GetCreatorByEmail :one
-SELECT id, user_type_id, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, payment_info, logo_picture FROM users INNER JOIN creators
+SELECT id, user_type, first_name, last_name, email, created_date, username, phone_no, gender, profile_picture, bio, background_picture, fanfit_user_id, payment_info, logo_picture FROM users INNER JOIN creators
 ON users.id = creators.fanfit_user_id
 WHERE email = $1
 `
 
 type GetCreatorByEmailRow struct {
 	ID                int32
-	UserTypeID        int32
+	UserType          UserType
 	FirstName         string
 	LastName          string
 	Email             string
@@ -55,8 +55,8 @@ type GetCreatorByEmailRow struct {
 	Bio               sql.NullString
 	BackgroundPicture sql.NullString
 	FanfitUserID      int32
-	PaymentInfo       string
-	LogoPicture       string
+	PaymentInfo       sql.NullString
+	LogoPicture       sql.NullString
 }
 
 func (q *Queries) GetCreatorByEmail(ctx context.Context, email string) (GetCreatorByEmailRow, error) {
@@ -64,7 +64,7 @@ func (q *Queries) GetCreatorByEmail(ctx context.Context, email string) (GetCreat
 	var i GetCreatorByEmailRow
 	err := row.Scan(
 		&i.ID,
-		&i.UserTypeID,
+		&i.UserType,
 		&i.FirstName,
 		&i.LastName,
 		&i.Email,

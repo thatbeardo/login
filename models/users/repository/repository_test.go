@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"net"
 	"net/url"
+	"os"
 	"runtime"
 	"testing"
 	"time"
@@ -100,6 +101,7 @@ func startDatabase(tb testing.TB) string {
 }
 
 func TestAddUsers(t *testing.T) {
+	os.Chdir("../../../")
 	t.Parallel()
 
 	userStore, err := repository.NewUserStore(startDatabase(t))
@@ -119,9 +121,9 @@ func TestAddUsers(t *testing.T) {
 	t.Run("Add and retrieve a user ", func(t *testing.T) {
 		t.Parallel()
 		addedUser, err := userStore.Create(ctx, repository.User{
-			FirstName:  "test-name",
-			Email:      "test-email",
-			UserTypeID: 1,
+			FirstName: "test-name",
+			Email:     "test-email",
+			UserType:  "client",
 		})
 		if err != nil {
 			t.Fatalf("Failed to add users: %s", err)
