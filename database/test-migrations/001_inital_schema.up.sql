@@ -5,6 +5,7 @@ CREATE TYPE user_type AS ENUM ('client', 'creator');
 CREATE TABLE IF NOT EXISTS users (
     id              SERIAL     PRIMARY KEY,
     user_type    user_type     NOT NULL,
+
     first_name      TEXT    NOT NULL,
     last_name       TEXT    NOT NULL,
     email           TEXT    NOT NULL UNIQUE,
@@ -15,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     profile_picture VARCHAR(1000) NULL,
     bio             VARCHAR(1000) NULL,
     background_picture TEXT         NULL
+
 );
 
 CREATE TABLE IF NOT EXISTS clients (
@@ -31,6 +33,7 @@ CREATE TABLE IF NOT EXISTS creators (
     PRIMARY KEY (fanfit_user_id),
     FOREIGN KEY (fanfit_user_id) REFERENCES users(id)
 );
+
 -- Inserts a new creator
 DO $$
 DECLARE
@@ -49,6 +52,7 @@ DECLARE
 BEGIN
     INSERT INTO users(user_type, first_name, last_name, email, username, phone_no, gender, profile_picture, bio, background_picture)
     VALUES('creator', 'Stefana', 'Hall', 'stefana@gmail.com', 'definingFitness', '443-890-1952',
+
            'Female', 'test_profile_picture', 'Love female body positivity!', 'test_image')
     RETURNING users.id INTO last_id;
     INSERT INTO creators(fanfit_user_id, payment_info, logo_picture)
