@@ -26,8 +26,8 @@ var testUser = repository.GetCreatorByEmailRow{
 	ProfilePicture:    sql.NullString{},
 	Bio:               sql.NullString{},
 	FanfitUserID:      0,
-	PaymentInfo:       sql.NullString{},
-	LogoPicture:       sql.NullString{},
+	PaymentInfo:       "sql.NullString{}",
+	LogoPicture:       "sql.NullString{}",
 	BackgroundPicture: sql.NullString{},
 }
 
