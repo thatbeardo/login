@@ -2,7 +2,7 @@ name: User Service Development Deployment
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
 
 jobs:
   Development Deployment:
